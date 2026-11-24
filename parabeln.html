@@ -198,7 +198,7 @@ function fig2() {
       { k: 'f', z: [KF('f(x)') + ' = ' + A('2') + 'x²'], c: 'th' },
       { k: 'fz', z: [A('a = 2') + ' ist größer als 1.', KF('f') + ' ist gestreckt, also schmaler.'] },
       { k: 'g', gap: 40, z: [KG('g(x)') + ' = ' + A('0,5') + 'x²'], c: 'th' },
-      { k: 'gz', z: [A('a = 0,5') + ' liegt zwischen 0 und 1.', KG('g') + ' ist gestaucht, also breiter.'] }
+      { k: 'gz', z: [A('a = 0,5') + ' ist größer als 0', 'und kleiner als 1.', KG('g') + ' ist gestaucht, also breiter.'] }
     ]) + legende(760, 560);
 }
 
@@ -212,9 +212,9 @@ function fig3() {
     teil('gk', graph(G, x => -0.5 * x * x, 'kg') + text(G.X(3.6) + 12, G.Y(-6.5), 'g', 'tb cg')) +
     spalte(690, 50, 680, [
       { k: 'f', z: [KF('f(x)') + ' = ' + A('−2') + 'x²'], c: 'th' },
-      { k: 'fz', z: [A('a = −2') + ' ist negativ und', 'ohne Minus größer als 1.', KF('f') + ' ist nach unten offen und gestreckt.'] },
+      { k: 'fz', z: [A('a = −2') + ' ist kleiner als −1.', KF('f') + ' ist gestreckt und nach unten offen.'] },
       { k: 'g', gap: 40, z: [KG('g(x)') + ' = ' + A('−0,5') + 'x²'], c: 'th' },
-      { k: 'gz', z: [A('a = −0,5') + ' ist negativ und', 'ohne Minus kleiner als 1.', KG('g') + ' ist nach unten offen und gestaucht.'] }
+      { k: 'gz', z: [A('a = −0,5') + ' ist größer als −1', 'und kleiner als 0.', KG('g') + ' ist gestaucht und nach unten offen.'] }
     ]) + legende(690, 580, '−1');
 }
 
@@ -230,9 +230,9 @@ function fig4() {
     teil('gp', hoch(-3, [-2, -1, 0, 1, 2]) + text(G.X(0) + 8, G.Y(-1.6), E('−3'), 'tb kl')) +
     spalte(640, 50, 640, [
       { k: 'f', z: [KF('f(x)') + ' = x² ' + E('+ 2')], c: 'th' },
-      { k: 'fz', z: [[E('e = 2'), 'um ' + E('2') + ' nach oben verschoben'], 'Scheitelpunkt S(0|' + E('2') + ')'] },
+      { k: 'fz', z: [[E('e = 2'), 'um ' + E('2') + ' Einheiten nach oben'], 'Scheitelpunkt S(0|' + E('2') + ')'] },
       { k: 'g', gap: 40, z: [KG('g(x)') + ' = x² ' + E('− 3')], c: 'th' },
-      { k: 'gz', z: [[E('e = −3'), 'um ' + E('3') + ' nach unten verschoben'], 'Scheitelpunkt S(0|' + E('−3') + ')'] }
+      { k: 'gz', z: [[E('e = −3'), 'um ' + E('3') + ' Einheiten nach unten'], 'Scheitelpunkt S(0|' + E('−3') + ')'] }
     ], 150) + legende(640, 580);
 }
 
@@ -247,10 +247,10 @@ function fig5() {
     teil('gp', pf(G, 0, 0, -3, 0, 'd') + pf(G, -2, 4, -5, 4, 'd') + text(G.X(-3.5), G.Y(4) - 26, D('−3'), 'tb', 'middle')) +
     spalte(850, 30, 620, [
       { k: 'f', z: [KF('f(x)') + ' = (x − ' + D('2') + ')²'], c: 'th' },
-      { k: 'fz', z: [[D('d = 2'), 'um ' + D('2') + ' nach rechts verschoben'], 'Scheitelpunkt S(' + D('2') + '|0)'] },
+      { k: 'fz', z: [[D('d = 2'), 'um ' + D('2') + ' Einheiten nach rechts'], 'Scheitelpunkt S(' + D('2') + '|0)'] },
       { k: 'g', gap: 34, z: [KG('g(x)') + ' = (x + ' + D('3') + ')²'], c: 'th' },
       { k: 'gd', z: ['(x + ' + D('3') + ')² = (x − (' + D('−3') + '))²'] },
-      { k: 'gz', z: [[D('d = −3'), 'um ' + D('3') + ' nach links verschoben'], 'Scheitelpunkt S(' + D('−3') + '|0)'] }
+      { k: 'gz', z: [[D('d = −3'), 'um ' + D('3') + ' Einheiten nach links'], 'Scheitelpunkt S(' + D('−3') + '|0)'] }
     ], 150) + legende(850, 500);
 }
 
@@ -293,8 +293,8 @@ function fig7() {
       { z: ['f(x) = ' + A('a') + '(x − ' + D('d') + ')² + ' + E('e')], c: 'th' },
       { z: ['Scheitelpunkt S(' + D('d') + '|' + E('e') + ')'] },
       { gap: 34, z: [KF('f(x)') + ' = ' + A('2') + '(x + ' + D('3') + ')² ' + E('+ 2')], c: 'th' },
-      { k: 'dz', z: [['(x + ' + D('3') + ')²;  ' + D('d = −3'), 'um ' + D('3') + ' nach links']] },
-      { k: 'ez', z: [[E('+ 2') + ';  ' + E('e = 2'), 'um ' + E('2') + ' nach oben']] },
+      { k: 'dz', z: [['(x + ' + D('3') + ')²;  ' + D('d = −3'), 'um ' + D('3') + ' Einheiten nach links']] },
+      { k: 'ez', z: [[E('+ 2') + ';  ' + E('e = 2'), 'um ' + E('2') + ' Einheiten nach oben']] },
       { k: 'Sz', z: ['Scheitelpunkt S(' + D('−3') + '|' + E('2') + ')'] },
       { k: 'oz', z: [[A('a > 0'), 'nach oben offen']] },
       { k: 'az', z: [[A('a = 2'), 'gestreckt']] },
@@ -315,10 +315,10 @@ function neueAufgabe() {
 function fig8() {
   const G = G8, { a, d, e } = auf, fn = x => a * (x - d) ** 2 + e;
   const aT = a === 1 ? '' : a === -1 ? A('−') : A(zf(a));
-  const art = Math.abs(a) === 1 ? 'weder gestreckt noch gestaucht' : Math.abs(a) > 1 ? 'gestreckt' : 'gestaucht';
+  const art = a === 1 ? ['verschobene Normalparabel'] : a === -1 ? ['an der x-Achse gespiegelte', 'Normalparabel'] : [Math.abs(a) > 1 ? 'gestreckt' : 'gestaucht'];
   const np = x => Math.sign(a) * (x - d) ** 2 + e;
-  const dz = d > 0 ? ['(x − ' + D(d) + ')²;  ' + D(`d = ${d}`), 'um ' + D(d) + ' nach rechts'] : ['(x + ' + D(-d) + ')²;  ' + D(`d = ${zf(d)}`), 'um ' + D(-d) + ' nach links'];
-  const ez = e > 0 ? [E(`+ ${e}`) + ';  ' + E(`e = ${e}`), 'um ' + E(e) + ' nach oben'] : [E(`− ${-e}`) + ';  ' + E(`e = ${zf(e)}`), 'um ' + E(-e) + ' nach unten'];
+  const dz = d > 0 ? ['(x − ' + D(d) + ')²;  ' + D(`d = ${d}`), 'um ' + D(d) + ' Einheiten nach rechts'] : ['(x + ' + D(-d) + ')²;  ' + D(`d = ${zf(d)}`), 'um ' + D(-d) + ' Einheiten nach links'];
+  const ez = e > 0 ? [E(`+ ${e}`) + ';  ' + E(`e = ${e}`), 'um ' + E(e) + ' Einheiten nach oben'] : [E(`− ${-e}`) + ';  ' + E(`e = ${zf(e)}`), 'um ' + E(-e) + ' Einheiten nach unten'];
   return gitter(G) +
     teil('k', graph(G, fn, 'kf')) +
     teil('dp', pf(G, 0, 0, d, 0, 'd')) +
@@ -333,21 +333,21 @@ function fig8() {
       { k: 'ez', z: [ez] },
       { k: 'Sz', z: ['Scheitelpunkt S(' + D(zf(d)) + '|' + E(zf(e)) + ')'] },
       { k: 'oz', z: [[A(a > 0 ? 'a > 0' : 'a < 0'), 'nach ' + (a > 0 ? 'oben' : 'unten') + ' offen']] },
-      { k: 'az', z: [[A('a = ' + zf(a)), art]] }
+      { k: 'az', z: [[A('a = ' + zf(a)), art[0]], ...art.slice(1).map(t => ['', t])] }
     ], 295);
 }
 
 // ---------- 9 Das Wichtigste ----------
 function fig9() {
-  const c2 = 700, r = (y, l, rt, t1, t2) => zeile(50, y, l, 'tl', t1) + zeile(c2, y, rt, 'tl', t2);
-  return `<rect class="merkbox" x="10" y="10" width="1380" height="610" rx="16"/>` +
+  const c2 = 840, r = (y, l, rt) => zeile(50, y, l, 'tl', 410) + zeile(c2, y, rt, 'tl', 160);
+  return `<rect class="merkbox" x="10" y="10" width="1540" height="610" rx="16"/>` +
     text(50, 66, 'Parabeln strecken, stauchen und verschieben', 'th') +
     text(50, 150, 'f(x) = ' + A('a') + '(x − ' + D('d') + ')² + ' + E('e'), 'tv') + text(c2, 150, 'Scheitelpunkt S(' + D('d') + '|' + E('e') + ')', 'tv') +
-    r(240, [A('a') + ' > 0', 'nach oben offen'], [A('a') + ' < 0', 'nach unten offen'], 260, 340) +
-    r(296, [A('a = 2') + ' oder ' + A('−2'), 'gestreckt'], [A('a = 0,5') + ' oder ' + A('−0,5'), 'gestaucht'], 260, 340) +
-    r(386, ['(x − ' + D('2') + ')²', 'um ' + D('2') + ' nach rechts'], ['(x + ' + D('2') + ')²', 'um ' + D('2') + ' nach links'], 260, 340) +
-    r(476, ['x² ' + E('+ 2'), 'um ' + E('2') + ' nach oben'], ['x² ' + E('− 2'), 'um ' + E('2') + ' nach unten'], 260, 340) +
-    text(50, 566, 'Minus in der Klammer heißt nach rechts.', 'tb');
+    r(250, [A('a') + ' > 0', 'nach oben offen'], ['(x − ' + D('2') + ')²', 'um ' + D('2') + ' Einheiten nach rechts']) +
+    r(310, [A('a') + ' < 0', 'nach unten offen'], ['(x + ' + D('2') + ')²', 'um ' + D('2') + ' Einheiten nach links']) +
+    r(400, [A('a') + ' > 1 oder ' + A('a') + ' < −1', 'gestreckt'], ['x² ' + E('+ 2'), 'um ' + E('2') + ' Einheiten nach oben']) +
+    r(460, ['−1 < ' + A('a') + ' < 0 oder 0 < ' + A('a') + ' < 1', 'gestaucht'], ['x² ' + E('− 2'), 'um ' + E('2') + ' Einheiten nach unten']) +
+    text(50, 556, 'Minus in der Klammer heißt nach rechts.', 'tb');
 }
 
 const STEPS = [
@@ -357,10 +357,10 @@ const STEPS = [
   { t: 'Nach oben oder unten verschieben', vb: [1340, 630], parts: ['f', 'fk', 'fp', 'fz', 'g', 'gk', 'gp', 'gz'], fig: fig4 },
   { t: 'Nach rechts oder links verschieben', vb: [1575, 540], parts: ['f', 'fk', 'fp', 'fz', 'g', 'gk', 'gp', 'gd', 'gz'], fig: fig5 },
   { t: 'Warum nach rechts?', vb: [1300, 600], parts: ['c0', 'c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'p0', 'p1', 'p2', 'p3', 'p4', 'z1', 'z2'], fig: fig6 },
-  { t: 'Scheitelpunktform', vb: [1470, 620], parts: ['dz', 'dp', 'ez', 'ep', 'Sz', 'S', 'oz', 'az', 'apz', 'ap', 'k'], fig: fig7 },
+  { t: 'Scheitelpunktform', vb: [1610, 620], parts: ['dz', 'dp', 'ez', 'ep', 'Sz', 'S', 'oz', 'az', 'apz', 'ap', 'k'], fig: fig7 },
   { t: 'Aufgabe: Beschreibe die Parabel', vb: [1545, 620], parts: ['dz', 'dp', 'ez', 'ep', 'Sz', 'S', 'oz', 'np', 'az', 'k'], fig: fig8,
     enter: neueAufgabe, btns: [{ l: 'Neue Aufgabe', f: neueAufgabe }] },
-  { t: 'Das Wichtigste', noT: 1, vb: [1400, 630], fig: fig9 }
+  { t: 'Das Wichtigste', noT: 1, vb: [1560, 630], fig: fig9 }
 ];
 
 // ---------- Ablauf ----------
