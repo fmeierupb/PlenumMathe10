@@ -150,7 +150,7 @@ function pfeil(x1, y1, x2, y2, c) {
 }
 const pf = (G, a, b, c, d, col) => pfeil(G.X(a), G.Y(b), G.X(c), G.Y(d), col);
 const punkt = (G, x, y) => `<circle class="hr" cx="${f1(G.X(x))}" cy="${f1(G.Y(y))}" r="30"/><circle class="pt" cx="${f1(G.X(x))}" cy="${f1(G.Y(y))}" r="8"/>`;
-const legende = (x, y) => `<line class="np" x1="${x}" y1="${y}" x2="${x + 56}" y2="${y}"/>` + text(x + 70, y, 'Normalparabel y = ' + A('1') + 'x²', 'tm');
+const legende = (x, y) => `<line class="np" x1="${x}" y1="${y}" x2="${x + 56}" y2="${y}"/>` + text(x + 70, y, 'Normalparabel y = ' + A('a') + 'x²;  ' + A('a = 1'), 'tm');
 
 // Textspalte neben dem Bild. Jeder Eintrag: k Teil (ohne k immer sichtbar), z Zeilen, c Schrift, gap Abstand davor.
 const ZH = { tl: 48, th: 62 };
@@ -177,10 +177,10 @@ const G1 = koord({ x0: -3.5, x1: 3.5, y0: -1, y1: 6, L: 60, T: 50, H: 540 });
 function fig1() {
   const G = G1;
   return gitter(G) +
-    teil('k', graph(G, x => x * x, 'kn') + text(G.X(-2.37) - 14, G.Y(5.6), 'y = ' + A('1') + 'x²', 'tb cn', 'end')) +
+    teil('k', graph(G, x => x * x, 'kn') + text(G.X(-2.37) - 14, G.Y(5.6), 'y = ' + A('a') + 'x²', 'tb cn', 'end')) +
     teil('S', punkt(G, 0, 0) + text(G.X(0) + 16, G.Y(0) + 56, 'S(0|0)', 'tb')) +
     spalte(690, 50, 620, [
-      { z: ['y = ' + A('1') + 'x²'], c: 'th' },
+      { z: ['y = ' + A('a') + 'x²'], c: 'th' },
       { k: 'a1', gap: 10, z: [[A('a = 1'), 'Normalparabel']] },
       { k: 'z1', gap: 24, z: ['Der tiefste Punkt heißt', 'Scheitelpunkt S(0|0).'] },
       { k: 'z2', gap: 24, z: ['Alle anderen Parabeln', 'entstehen aus der Normalparabel', 'durch Strecken, Stauchen', 'und Verschieben.'] }
@@ -266,14 +266,14 @@ function zeile6(y, kopf, werte) {
 }
 function fig6() {
   const y0 = T6.T, y1 = y0 + T6.rh, y2 = y1 + T6.rh + T6.gap;
-  let s = zeile6(y0, 'x', X6.map(zf)) + zeile6(y1, 'y = ' + A('1') + 'x²', X6.map(x => zf(x * x))) + zeile6(y2, KF('f(x)') + ' = (x − ' + D('2') + ')²', X6.map(() => null));
+  let s = zeile6(y0, 'x', X6.map(zf)) + zeile6(y1, 'y = ' + A('a') + 'x²;  ' + A('a = 1'), X6.map(x => zf(x * x))) + zeile6(y2, KF('f(x)') + ' = (x − ' + D('2') + ')²', X6.map(() => null));
   X6.forEach((x, i) => {
     const y = y2 + T6.rh / 2;
     s += teil('c' + i, `<rect class="hr" x="${cx6(i) - T6.cw / 2}" y="${y2}" width="${T6.cw}" height="${T6.rh}"/>` + text(cx6(i), y, zf((x - 2) ** 2), 'tv', 'middle'), text(cx6(i), y, '?', 'tq', 'middle'));
   });
   for (let i = 0; i < 5; i++) s += teil('p' + i, pfeil(cx6(i), y1 + T6.rh + 14, cx6(i + 2), y2 - 14, 'd'));
   return s + spalte(T6.L + 12, y2 + T6.rh + 30, 1200, [
-    { k: 'z1', z: [KF('f') + ' hat dieselben Werte wie y = ' + A('1') + 'x², nur ' + D('2') + ' Stellen weiter rechts.'] },
+    { k: 'z1', z: [KF('f') + ' hat dieselben Werte wie die Normalparabel, nur ' + D('2') + ' Stellen weiter rechts.'] },
     { k: 'z2', gap: 14, z: ['Bei x = ' + D('2') + ' ist die Klammer null: (' + D('2') + ' − ' + D('2') + ')² = 0.', 'Dort liegt der Scheitelpunkt S(' + D('2') + '|0).'] }
   ]);
 }
