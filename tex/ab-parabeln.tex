@@ -50,7 +50,7 @@
 \newenvironment{liste}{\begin{tabular}{@{}l@{\hspace{0.9em}}l@{\hspace{0.45em}}l@{}}}{\end{tabular}}
 
 \renewcommand{\bl}{0.55}
-\newcommand{\sk}{0.66cm}
+\newcommand{\sk}{0.63cm}
 \begin{document}
 
 {\LARGE\bfseries Parabeln strecken, stauchen, verschieben\par}
@@ -86,7 +86,9 @@ $a < 0$ & -- & nach unten offen
 $f(x) = x^2 + e$ & -- & Scheitelpunkt $S(0|e)$\\[5pt]
 $f(x) = x^2 + 2$ & -- & um 2 nach oben\\
 $g(x) = x^2 - 3$ & -- & um 3 nach unten
-\end{liste}}{%
+\end{liste}\par\medskip
+Buch S.\,44 Nr.\,1 bis 9\par
+Buch S.\,45 Nr.\,1 bis 11}{%
 \begin{tikzpicture}[x=\sk,y=\sk]
   \gitter{-3.5}{3.5}{-3.5}{4.5}
   \draw[schub] (0,0) -- (0,2);
@@ -115,7 +117,9 @@ $f(x) = (x - d)^2$ & -- & Scheitelpunkt $S(d|0)$\\[5pt]
 $f(x) = (x - 2)^2$ & -- & um 2 nach rechts\\
 $g(x) = (x + 3)^2$ & -- & um 3 nach links
 \end{liste}\par\smallskip
-\textbf{Minus in der Klammer heißt nach rechts.}}{%
+\textbf{Minus in der Klammer heißt nach rechts.}\par\medskip
+Buch S.\,48 Nr.\,1 bis 5\par
+Buch S.\,49 Nr.\,1 bis 5}{%
 \begin{tikzpicture}[x=\sk,y=\sk]
   \gitter{-5.5}{3.5}{-1}{4.5}
   \draw[schub] (0,0) -- (2,0);
@@ -146,7 +150,9 @@ $d = -3$ & -- & um 3 nach links\\
 $e = 2$ & -- & um 2 nach oben\\
 $S(-3|2)$ & -- & Scheitelpunkt
 \end{liste}\par\smallskip
-Von $S$ aus 1 nach rechts\par und $a$ nach oben.}{%
+Von $S$ aus 1 nach rechts\par und $a$ nach oben.\par\medskip
+Buch S.\,48 Nr.\,6 bis 9\par
+Buch S.\,49 Nr.\,6 bis 9}{%
 \begin{tikzpicture}[x=\sk,y=\sk]
   \gitter{-5.5}{1.5}{-1}{5.5}
   \draw[schub] (0,0) -- (-3,0);
@@ -167,10 +173,6 @@ Von $S$ aus 1 nach rechts\par und $a$ nach oben.}{%
 \end{tikzpicture}}
 
 \vfill
-
-{\Large\bfseries Aufgaben im Heft\par}
-\medskip
-Buch S.\,\rule{1.5cm}{0.4pt} Nr.\,\rule{5cm}{0.4pt}
 
 \kaestchen
 \end{document}
