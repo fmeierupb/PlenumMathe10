@@ -203,22 +203,19 @@ function fig2() {
 }
 
 // ---------- 3 Nach unten offen ----------
-// Wie Folie 2, nur mit negativem a. Erst die Öffnung, dann kommt die nach unten geöffnete Normalparabel, dann Strecken oder Stauchen.
+// Ablauf wie Folie 2, nur mit negativem a und der nach unten geöffneten Normalparabel als Vergleich.
 const G3 = koord({ x0: -4, x1: 4, y0: -7, y1: 1, L: 60, T: 50, H: 540, tkUp: 1 });
 function fig3() {
-  const G = G3, nu = x => -x * x;
-  return gitter(G) +
-    teil('np', kurve(G, nu, 'hz') + kurve(G, nu, 'np') + legende(690, 580, '−1')) +
+  const G = G3;
+  return gitter(G) + kurve(G, x => -x * x, 'np') +
     teil('fk', graph(G, x => -2 * x * x, 'kf') + text(G.X(1.66) + 14, G.Y(-5.5), 'f', 'tb cf')) +
     teil('gk', graph(G, x => -0.5 * x * x, 'kg') + text(G.X(3.6) + 12, G.Y(-6.5), 'g', 'tb cg')) +
     spalte(690, 50, 680, [
       { k: 'f', z: [KF('f(x)') + ' = ' + A('−2') + 'x²'], c: 'th' },
-      { k: 'fo', z: [[A('a < 0'), 'nach unten offen']] },
-      { k: 'fa', z: [[A('a = −2'), 'ohne Minus größer als 1,'], ['', 'also gestreckt']] },
+      { k: 'fz', z: [A('a = −2') + ' ist negativ und', 'ohne Minus größer als 1.', KF('f') + ' ist nach unten offen und gestreckt.'] },
       { k: 'g', gap: 40, z: [KG('g(x)') + ' = ' + A('−0,5') + 'x²'], c: 'th' },
-      { k: 'go', z: [[A('a < 0'), 'nach unten offen']] },
-      { k: 'ga', z: [[A('a = −0,5'), 'ohne Minus kleiner als 1,'], ['', 'also gestaucht']] }
-    ], 170);
+      { k: 'gz', z: [A('a = −0,5') + ' ist negativ und', 'ohne Minus kleiner als 1.', KG('g') + ' ist nach unten offen und gestaucht.'] }
+    ]) + legende(690, 580, '−1');
 }
 
 // ---------- 4 Nach oben oder unten ----------
@@ -356,7 +353,7 @@ function fig9() {
 const STEPS = [
   { t: 'Die Normalparabel', vb: [1320, 620], parts: ['k', 'a1', 'S', 'z1', 'z2'], fig: fig1 },
   { t: 'Strecken und Stauchen', vb: [1400, 620], parts: ['f', 'fk', 'fz', 'g', 'gk', 'gz'], fig: fig2 },
-  { t: 'Nach unten offen', vb: [1400, 620], parts: ['f', 'fo', 'np', 'fa', 'fk', 'g', 'go', 'ga', 'gk'], fig: fig3 },
+  { t: 'Nach unten offen', vb: [1400, 620], parts: ['f', 'fk', 'fz', 'g', 'gk', 'gz'], fig: fig3 },
   { t: 'Nach oben oder unten verschieben', vb: [1340, 630], parts: ['f', 'fk', 'fp', 'fz', 'g', 'gk', 'gp', 'gz'], fig: fig4 },
   { t: 'Nach rechts oder links verschieben', vb: [1575, 540], parts: ['f', 'fk', 'fp', 'fz', 'g', 'gk', 'gp', 'gd', 'gz'], fig: fig5 },
   { t: 'Warum nach rechts?', vb: [1300, 600], parts: ['c0', 'c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'p0', 'p1', 'p2', 'p3', 'p4', 'z1', 'z2'], fig: fig6 },
