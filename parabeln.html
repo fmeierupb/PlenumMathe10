@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; worker-src 'self'; manifest-src 'self'">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Mathe 10">
+<meta name="theme-color" content="#0f766e">
+<title>Parabeln strecken, stauchen und verschieben</title>
+<style>
+:root{--bg:#fbfaf6;--fg:#161a22;--mut:#9aa0ad;--line:#d9d7cf;--grid:#e4e1d8;--c1:#2563eb;--c2:#f08a00;--c3:#12a150;--cr:#d81e1e;--btn:#fff}
+@media (prefers-color-scheme:dark){:root{--bg:#12151b;--fg:#f0f2f6;--mut:#7d8596;--line:#343b48;--grid:#29303b;--c1:#5b9bff;--c2:#ffad33;--c3:#3ddc84;--cr:#ff5c5c;--btn:#1f242d}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{display:flex;flex-direction:column;height:100dvh;padding:12px 16px calc(12px + env(safe-area-inset-bottom));user-select:none;-webkit-user-select:none}
+h1{margin:0;font-size:clamp(26px,4.2vw,52px);line-height:1.15;min-height:1.2em}
+#fig{flex:1;min-height:0;width:100%;touch-action:manipulation}
+footer{display:flex;gap:10px;align-items:center;margin-top:10px}
+#extras{display:flex;gap:10px;margin:0 auto}
+button{font:inherit;font-size:clamp(16px,2vw,24px);color:inherit;background:var(--btn);border:1px solid var(--line);border-radius:12px;padding:12px 18px;cursor:pointer;touch-action:manipulation}
+button:disabled{opacity:.3}
+#menu{font:inherit;font-size:clamp(16px,2vw,24px);color:inherit;background:var(--btn);border:1px solid var(--line);border-radius:12px;padding:12px 18px;text-decoration:none}
+#fs svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;vertical-align:-.15em}
+#fs .fo,html.fs #fs .fi{display:none}
+html.fs #fs .fo{display:inline}
+#cnt{color:var(--mut);font-size:clamp(14px,1.6vw,20px);min-width:3.5em;text-align:center}
+#next{background:var(--c1);border-color:var(--c1);color:#fff;font-weight:700}
+footer{flex-wrap:wrap;row-gap:8px}
+#extras{flex-wrap:wrap;justify-content:center}
+#extras:empty{display:none}
+/* Handy hochkant: Zusatzknöpfe in eine eigene Zeile, Zurück nur als Pfeil. Was trotzdem nicht passt, bricht um, statt aus dem Bild zu rutschen. */
+@media (max-width:700px){#extras{order:9;flex-basis:100%;margin:0}#next{margin-left:auto}footer{gap:8px}button,#menu{padding:10px 12px}#cnt{min-width:0}}
+@media (max-width:420px){#prev .lbl{display:none}}
+svg .gr{stroke:var(--grid);stroke-width:1.5}
+svg .ax{stroke:var(--fg);stroke-width:2.5}
+svg .axh{fill:var(--fg)}
+svg .tk{fill:var(--mut);font:600 22px system-ui,sans-serif}
+svg .tax{fill:var(--fg);font:italic 600 26px system-ui,sans-serif}
+svg .np{stroke:var(--mut);stroke-width:3.5;stroke-dasharray:12 9;fill:none}
+svg .pk{stroke:var(--fg);stroke-width:5;fill:none;stroke-linejoin:round}
+/* Unsichtbare Tippflächen: breite Spur entlang von Kurven und Pfeilen, Rechtecke über Textzeilen */
+svg .hz{stroke:transparent;stroke-width:44;fill:none;pointer-events:stroke}
+svg .hr{fill:transparent;pointer-events:all}
+/* Verdeckte Teile bleiben antippbar */
+svg .zu{opacity:0}
+svg .pt{fill:var(--fg)}
+svg .ln{stroke:var(--fg);stroke-width:2.5;fill:none}
+svg .lnd{stroke:var(--fg);stroke-width:4;fill:none}
+svg .pd{stroke:var(--cr);stroke-width:5;stroke-linecap:round}
+svg .hd{fill:var(--cr)}
+svg .pe{stroke:var(--c3);stroke-width:5;stroke-linecap:round}
+svg .he{fill:var(--c3)}
+svg .pa{stroke:var(--c1);stroke-width:5;stroke-linecap:round}
+svg .ha{fill:var(--c1)}
+svg .pn{stroke:var(--fg);stroke-width:4;stroke-linecap:round}
+svg .hn{fill:var(--fg)}
+svg .tl{fill:var(--fg);font:600 34px system-ui,sans-serif}
+svg .th{fill:var(--fg);font:700 42px system-ui,sans-serif}
+svg .tb{fill:var(--fg);font:700 30px system-ui,sans-serif}
+/* Beschriftungen im Bild mit Rand in Hintergrundfarbe, damit sie über Linien lesbar bleiben */
+svg .hl{paint-order:stroke;stroke:var(--bg);stroke-width:8px;stroke-linejoin:round}
+svg .tv{fill:var(--fg);font:600 44px system-ui,sans-serif}
+svg .tvh{fill:var(--fg);font:700 38px system-ui,sans-serif}
+svg .tq{fill:var(--mut);font:600 44px system-ui,sans-serif}
+svg .tm{fill:var(--mut);font:600 26px system-ui,sans-serif}
+svg .cd{fill:var(--cr)}
+svg .ce{fill:var(--c3)}
+svg .ca{fill:var(--c1)}
+svg .kopf{fill:var(--grid)}
+svg .merkbox{fill:rgba(18,161,80,.08);stroke:var(--c3);stroke-width:3}
+</style>
+</head>
+<body>
+<h1 id="title"></h1>
+<svg id="fig" viewBox="0 0 1300 620" xmlns="http://www.w3.org/2000/svg"></svg>
+<footer>
+  <a id="menu" href="./">Menü</a><button id="fs" aria-label="Vollbild" title="Vollbild (F)"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="fi" d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/><path class="fo" d="M9 4v5H4M20 9h-5V4M15 20v-5h5M4 15h5v5"/></svg></button><button id="prev" aria-label="Zurück">‹<span class="lbl"> Zurück</span></button><span id="cnt"></span>
+  <div id="extras"></div>
+  <button id="next">Weiter ›</button>
+</footer>
+<script>
+'use strict';
+const $ = id => document.getElementById(id);
+const f1 = n => (+n).toFixed(1);
+const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const pick = a => a[rnd(0, a.length - 1)];
+// Zahlen wie im Heft: Komma statt Punkt, echtes Minuszeichen.
+const zf = v => (v < 0 ? '−' : '') + String(Math.abs(v)).replace('.', ',');
+// Farben der Parameter wie im Buch: a blau, d rot, e grün. Überall gleich, in Bild und Text.
+const A = s => `<tspan class="ca">${s}</tspan>`, D = s => `<tspan class="cd">${s}</tspan>`, E = s => `<tspan class="ce">${s}</tspan>`;
+const text = (x, y, s, c = 'tl', a = 'start') => `<text class="${c}" x="${f1(x)}" y="${f1(y)}" text-anchor="${a}" dominant-baseline="central">${s}</text>`;
+
+// ---------- Aufdecken ----------
+// Jede Folie nennt ihre Teile in parts. Weiter deckt sie der Reihe nach auf, Zurück nimmt den letzten wieder weg.
+// Antippen deckt einen Teil einzeln auf oder zu.
+let step = 0, shownStep = -1, opened = new Set();
+const vis = k => opened.has(k);
+// Verdeckt bleibt ein Teil unsichtbar, aber antippbar. ph: was solange an seiner Stelle steht.
+const teil = (k, s, ph = '') => vis(k) ? `<g data-k="${k}">${s}</g>` : `<g data-k="${k}">${ph}<g class="zu">${s}</g></g>`;
+
+// ---------- Koordinatensystem ----------
+// Fenster x0 bis x1, y0 bis y1. L, T: linke obere Ecke im Bild, H: Höhe in Pixeln. Kästchen sind 0,5 Einheiten groß wie im Buch.
+function koord(o) {
+  const u = o.H / (o.y1 - o.y0), W = u * (o.x1 - o.x0);
+  return Object.assign({}, o, { u, W, R: o.L + W, B: o.T + o.H, X: x => o.L + (x - o.x0) * u, Y: y => o.T + (o.y1 - y) * u });
+}
+function gitter(G) {
+  const { X, Y } = G, x0 = X(0), y0 = Y(0);
+  let s = `<clipPath id="cl"><rect x="${f1(G.L)}" y="${f1(G.T)}" width="${f1(G.W)}" height="${f1(G.H)}"/></clipPath>`;
+  for (let k = Math.ceil(G.x0 * 2); k <= Math.floor(G.x1 * 2); k++) s += `<line class="gr" x1="${f1(X(k / 2))}" y1="${f1(G.T)}" x2="${f1(X(k / 2))}" y2="${f1(G.B)}"/>`;
+  for (let k = Math.ceil(G.y0 * 2); k <= Math.floor(G.y1 * 2); k++) s += `<line class="gr" x1="${f1(G.L)}" y1="${f1(Y(k / 2))}" x2="${f1(G.R)}" y2="${f1(Y(k / 2))}"/>`;
+  s += `<line class="ax" x1="${f1(G.L)}" y1="${f1(y0)}" x2="${f1(G.R + 12)}" y2="${f1(y0)}"/><polygon class="axh" points="${f1(G.R + 26)},${f1(y0)} ${f1(G.R + 8)},${f1(y0 - 8)} ${f1(G.R + 8)},${f1(y0 + 8)}"/>`;
+  s += `<line class="ax" x1="${f1(x0)}" y1="${f1(G.B)}" x2="${f1(x0)}" y2="${f1(G.T - 12)}"/><polygon class="axh" points="${f1(x0)},${f1(G.T - 26)} ${f1(x0 - 8)},${f1(G.T - 8)} ${f1(x0 + 8)},${f1(G.T - 8)}"/>`;
+  s += text(G.R + 20, y0 + 28, 'x', 'tax', 'middle') + text(x0 + 16, G.T - 24, 'y', 'tax');
+  for (let i = Math.ceil(G.x0); i <= Math.floor(G.x1); i++) if (i && X(i) > G.L + 12 && X(i) < G.R - 12) s += `<line class="ax" x1="${f1(X(i))}" y1="${f1(y0 - 6)}" x2="${f1(X(i))}" y2="${f1(y0 + 6)}"/>` + text(X(i), y0 + (G.tkUp ? -24 : 24), zf(i), 'tk', 'middle');
+  for (let j = Math.ceil(G.y0); j <= Math.floor(G.y1); j++) if (j && Y(j) > G.T + 12 && Y(j) < G.B - 12) s += `<line class="ax" x1="${f1(x0 - 6)}" y1="${f1(Y(j))}" x2="${f1(x0 + 6)}" y2="${f1(Y(j))}"/>` + text(x0 - 12, Y(j), zf(j), 'tk', 'end');
+  return s;
+}
+// Kurve im Fenster. Was oben oder unten hinausgeht, schneidet der Rahmen ab.
+function kurve(G, fn, cls = 'pk') {
+  let d = '';
+  for (let i = 0; i <= 300; i++) {
+    const x = G.x0 + (G.x1 - G.x0) * i / 300, y = Math.max(G.y0 - 1, Math.min(G.y1 + 1, fn(x)));
+    d += (i ? 'L' : 'M') + f1(G.X(x)) + ' ' + f1(G.Y(y));
+  }
+  return `<path class="${cls}" d="${d}" clip-path="url(#cl)"/>`;
+}
+const graph = (G, fn) => kurve(G, fn, 'hz') + kurve(G, fn);
+const norm = G => kurve(G, x => x * x, 'np');
+// Pfeil in Pixeln. c: d rot, e grün, a blau, n schwarz.
+function pfeil(x1, y1, x2, y2, c) {
+  const l = Math.hypot(x2 - x1, y2 - y1) || 1, ux = (x2 - x1) / l, uy = (y2 - y1) / l, h = Math.min(22, l * 0.5), w = h * 0.5;
+  const bx = x2 - ux * h, by = y2 - uy * h;
+  return `<line class="hz" x1="${f1(x1)}" y1="${f1(y1)}" x2="${f1(x2)}" y2="${f1(y2)}"/>` +
+    `<line class="p${c}" x1="${f1(x1)}" y1="${f1(y1)}" x2="${f1(bx + ux * 2)}" y2="${f1(by + uy * 2)}"/>` +
+    `<polygon class="h${c}" points="${f1(x2)},${f1(y2)} ${f1(bx - uy * w)},${f1(by + ux * w)} ${f1(bx + uy * w)},${f1(by - ux * w)}"/>`;
+}
+const pf = (G, a, b, c, d, col) => pfeil(G.X(a), G.Y(b), G.X(c), G.Y(d), col);
+const punkt = (G, x, y) => `<circle class="hr" cx="${f1(G.X(x))}" cy="${f1(G.Y(y))}" r="30"/><circle class="pt" cx="${f1(G.X(x))}" cy="${f1(G.Y(y))}" r="8"/>`;
+const legende = (x, y) => `<line class="np" x1="${x}" y1="${y}" x2="${x + 56}" y2="${y}"/>` + text(x + 70, y, 'Normalparabel y = x²', 'tm');
+
+// Textspalte neben dem Bild. Jeder Eintrag: k Teil (ohne k immer sichtbar), z Zeilen, c Schrift, gap Abstand davor.
+const ZH = { tl: 48, th: 62 };
+function spalte(x, y, w, items) {
+  let s = '';
+  for (const it of items) {
+    const c = it.c || 'tl', h = ZH[c];
+    y += it.gap || 0;
+    const t = it.z.map((z, i) => text(x, y + h / 2 + i * h, z, c)).join('');
+    s += it.k ? teil(it.k, `<rect class="hr" x="${f1(x - 12)}" y="${f1(y)}" width="${f1(w)}" height="${f1(it.z.length * h)}"/>` + t) : t;
+    y += it.z.length * h;
+  }
+  return s;
+}
+
+// ---------- 1 Normalparabel ----------
+const G1 = koord({ x0: -3.5, x1: 3.5, y0: -1, y1: 6, L: 60, T: 50, H: 540 });
+function fig1() {
+  const G = G1;
+  return gitter(G) +
+    teil('k', graph(G, x => x * x) + text(G.X(2.3) + 14, G.Y(5.29), 'f', 'tb hl')) +
+    teil('S', punkt(G, 0, 0) + text(G.X(0) + 16, G.Y(0) + 56, 'S(0|0)', 'tb')) +
+    spalte(690, 50, 620, [
+      { z: ['f(x) = x²'], c: 'th' },
+      { k: 'z1', gap: 24, z: ['Der tiefste Punkt heißt', 'Scheitelpunkt S(0|0).'] },
+      { k: 'z2', gap: 24, z: ['Alle anderen Parabeln', 'entstehen aus der Normalparabel', 'durch Strecken, Stauchen', 'und Verschieben.'] }
+    ]);
+}
+
+// ---------- 2 Strecken und Stauchen ----------
+const G2 = koord({ x0: -4, x1: 4, y0: -1, y1: 6, L: 60, T: 50, H: 540 });
+function fig2() {
+  const G = G2;
+  return gitter(G) + norm(G) +
+    teil('fk', graph(G, x => 2 * x * x) + text(G.X(1.62) + 14, G.Y(5.25), 'f', 'tb hl')) +
+    teil('gk', graph(G, x => 0.5 * x * x) + text(G.X(3.1) + 14, G.Y(4.8), 'g', 'tb hl')) +
+    spalte(760, 50, 620, [
+      { k: 'f', z: ['f(x) = ' + A('2') + 'x²'], c: 'th' },
+      { k: 'fz', z: [A('a = 2') + ' ist größer als 1.', 'f ist gestreckt, also schmaler.'] },
+      { k: 'g', gap: 40, z: ['g(x) = ' + A('0,5') + 'x²'], c: 'th' },
+      { k: 'gz', z: [A('a = 0,5') + ' liegt zwischen 0 und 1.', 'g ist gestaucht, also breiter.'] }
+    ]) + legende(760, 560);
+}
+
+// ---------- 3 Nach unten offen ----------
+const G3 = koord({ x0: -4, x1: 4, y0: -6, y1: 2, L: 60, T: 50, H: 540, tkUp: 1 });
+function fig3() {
+  const G = G3;
+  return gitter(G) + norm(G) +
+    teil('fk', graph(G, x => -x * x) + text(G.X(2.1) + 14, G.Y(-4.41), 'f', 'tb hl')) +
+    teil('gk', graph(G, x => -0.5 * x * x) + text(G.X(3.2) + 14, G.Y(-5.12), 'g', 'tb hl')) +
+    spalte(690, 50, 620, [
+      { k: 'f', z: ['f(x) = ' + A('−') + 'x²'], c: 'th' },
+      { k: 'fz', z: [A('a = −1') + ' ist negativ.', 'f ist an der x-Achse gespiegelt', 'und nach unten offen.'] },
+      { k: 'g', gap: 40, z: ['g(x) = ' + A('−0,5') + 'x²'], c: 'th' },
+      { k: 'gz', z: [A('a = −0,5') + ' ist negativ und', 'ohne Minus kleiner als 1.', 'g ist gestaucht und', 'nach unten offen.'] }
+    ]) + legende(690, 580);
+}
+
+// ---------- 4 Nach oben oder unten ----------
+const G4 = koord({ x0: -4.5, x1: 4.5, y0: -4, y1: 7, L: 60, T: 50, H: 550 });
+function fig4() {
+  const G = G4;
+  const hoch = (e, xs) => xs.map(x => pf(G, x, x * x, x, x * x + e, 'e')).join('');
+  return gitter(G) + norm(G) +
+    teil('fk', graph(G, x => x * x + 2) + text(G.X(2.05) + 14, G.Y(6.2), 'f', 'tb hl')) +
+    teil('gk', graph(G, x => x * x - 3) + text(G.X(2.7) + 14, G.Y(4.29), 'g', 'tb hl')) +
+    teil('fp', hoch(2, [-2, 0, 2]) + text(G.X(0) + 10, G.Y(1.2), E('+2'), 'tb hl')) +
+    teil('gp', hoch(-3, [-1.5, 0, 1.5]) + text(G.X(0) + 10, G.Y(-1.6), E('−3'), 'tb hl')) +
+    spalte(600, 50, 640, [
+      { k: 'f', z: ['f(x) = x² ' + E('+ 2')], c: 'th' },
+      { k: 'fz', z: [E('e = 2') + ': 2 nach oben verschoben', 'Scheitelpunkt S(0|' + E('2') + ')'] },
+      { k: 'g', gap: 40, z: ['g(x) = x² ' + E('− 3')], c: 'th' },
+      { k: 'gz', z: [E('e = −3') + ': 3 nach unten verschoben', 'Scheitelpunkt S(0|' + E('−3') + ')'] }
+    ]) + legende(600, 570);
+}
+
+// ---------- 5 Nach rechts oder links ----------
+const G5 = koord({ x0: -6, x1: 5, y0: -1, y1: 6, L: 60, T: 50, H: 450 });
+function fig5() {
+  const G = G5;
+  return gitter(G) + norm(G) +
+    teil('fk', graph(G, x => (x - 2) ** 2) + text(G.X(4.3) + 14, G.Y(5.29), 'f', 'tb hl')) +
+    teil('gk', graph(G, x => (x + 3) ** 2) + text(G.X(-5.3) - 14, G.Y(5.29), 'g', 'tb hl', 'end')) +
+    teil('fp', pf(G, 0, 0, 2, 0, 'd') + pf(G, 2, 4, 4, 4, 'd') + text(G.X(3), G.Y(4) - 26, D('+2'), 'tb hl', 'middle')) +
+    teil('gp', pf(G, 0, 0, -3, 0, 'd') + pf(G, -2, 4, -5, 4, 'd') + text(G.X(-3.5), G.Y(4) - 26, D('−3'), 'tb hl', 'middle')) +
+    spalte(850, 30, 620, [
+      { k: 'f', z: ['f(x) = (x − ' + D('2') + ')²'], c: 'th' },
+      { k: 'fz', z: [D('d = 2') + ': 2 nach rechts verschoben', 'Scheitelpunkt S(' + D('2') + '|0)'] },
+      { k: 'g', gap: 34, z: ['g(x) = (x + ' + D('3') + ')²'], c: 'th' },
+      { k: 'gd', z: ['(x + 3)² = (x − (' + D('−3') + '))²'] },
+      { k: 'gz', z: [D('d = −3') + ': 3 nach links verschoben', 'Scheitelpunkt S(' + D('−3') + '|0)'] }
+    ]) + legende(850, 500);
+}
+
+// ---------- 6 Warum nach rechts? ----------
+const T6 = { L: 30, T: 16, hw: 340, cw: 124, rh: 84, gap: 128 }, X6 = [-2, -1, 0, 1, 2, 3, 4];
+const cx6 = i => T6.L + T6.hw + (i + 0.5) * T6.cw;
+function zeile6(y, kopf, werte) {
+  const R = T6.L + T6.hw + 7 * T6.cw;
+  let s = `<rect class="kopf" x="${T6.L}" y="${y}" width="${T6.hw}" height="${T6.rh}"/><rect class="ln" x="${T6.L}" y="${y}" width="${R - T6.L}" height="${T6.rh}"/>`;
+  for (let i = 0; i < 7; i++) s += `<line class="ln" x1="${T6.L + T6.hw + i * T6.cw}" y1="${y}" x2="${T6.L + T6.hw + i * T6.cw}" y2="${y + T6.rh}"/>`;
+  s += text(T6.L + 20, y + T6.rh / 2, kopf, 'tvh');
+  werte.forEach((w, i) => { if (w !== null) s += text(cx6(i), y + T6.rh / 2, w, 'tv', 'middle'); });
+  return s;
+}
+function fig6() {
+  const y0 = T6.T, y1 = y0 + T6.rh, y2 = y1 + T6.rh + T6.gap;
+  let s = zeile6(y0, 'x', X6.map(zf)) + zeile6(y1, 'y = x²', X6.map(x => zf(x * x))) + zeile6(y2, 'f(x) = (x − ' + D('2') + ')²', X6.map(() => null));
+  X6.forEach((x, i) => {
+    const y = y2 + T6.rh / 2;
+    s += teil('c' + i, `<rect class="hr" x="${cx6(i) - T6.cw / 2}" y="${y2}" width="${T6.cw}" height="${T6.rh}"/>` + text(cx6(i), y, zf((x - 2) ** 2), 'tv', 'middle'), text(cx6(i), y, '?', 'tq', 'middle'));
+  });
+  for (let i = 0; i < 5; i++) s += teil('p' + i, pfeil(cx6(i), y1 + T6.rh + 14, cx6(i + 2), y2 - 14, 'd'));
+  return s + spalte(T6.L + 12, y2 + T6.rh + 30, 1200, [
+    { k: 'z1', z: ['f hat dieselben Werte wie y = x², nur 2 Stellen weiter rechts.'] },
+    { k: 'z2', gap: 14, z: ['Bei x = ' + D('2') + ' ist die Klammer null: (2 − ' + D('2') + ')² = 0.', 'Dort liegt der Scheitelpunkt S(' + D('2') + '|0).'] }
+  ]);
+}
+
+// ---------- 7 Scheitelpunktform ----------
+const G7 = koord({ x0: -6, x1: 2, y0: -1, y1: 6, L: 60, T: 50, H: 540 });
+function fig7() {
+  const G = G7;
+  return gitter(G) + norm(G) +
+    teil('k', graph(G, x => 2 * (x + 3) ** 2 + 2) + text(G.X(-1.48) + 14, G.Y(5.8), 'f', 'tb hl')) +
+    teil('dp', pf(G, 0, 0, -3, 0, 'd') + text(G.X(-1.5), G.Y(0) - 26, D('−3'), 'tb hl', 'middle')) +
+    teil('ep', pf(G, -3, 0, -3, 2, 'e') + text(G.X(-3) + 12, G.Y(1), E('+2'), 'tb hl')) +
+    teil('ap', pf(G, -3, 2, -2, 2, 'n') + text(G.X(-2.5), G.Y(2) + 28, '1', 'tb hl', 'middle') + pf(G, -2, 2, -2, 4, 'a') + text(G.X(-2) + 14, G.Y(3), A('2'), 'tb hl')) +
+    teil('S', punkt(G, -3, 2) + text(G.X(-3) - 14, G.Y(2) + 32, 'S(−3|2)', 'tb hl', 'end')) +
+    spalte(780, 40, 680, [
+      { z: ['f(x) = ' + A('a') + '(x − ' + D('d') + ')² + ' + E('e')], c: 'th' },
+      { z: ['Scheitelpunkt S(' + D('d') + '|' + E('e') + ')'] },
+      { gap: 34, z: ['f(x) = ' + A('2') + '(x + ' + D('3') + ')² + ' + E('2')], c: 'th' },
+      { k: 'dz', z: ['(x + 3)²: ' + D('d = −3') + ', also 3 nach links'] },
+      { k: 'ez', z: ['+ 2: ' + E('e = 2') + ', also 2 nach oben'] },
+      { k: 'Sz', z: ['Scheitelpunkt S(' + D('−3') + '|' + E('2') + ')'] },
+      { k: 'az', z: [A('a = 2') + ': gestreckt, nach oben offen'] },
+      { k: 'apz', z: ['Von S aus 1 nach rechts', 'und ' + A('2') + ' nach oben.'] }
+    ]) + legende(780, 580);
+}
+
+// ---------- 8 Aufgabe ----------
+const G8 = koord({ x0: -6, x1: 6, y0: -6, y1: 6, L: 60, T: 50, H: 540 });
+// e nie ±1, damit die Beschriftung von S nicht auf der x-Achse landet.
+let auf = null;
+function neueAufgabe() {
+  const alt = auf; let a, d, e;
+  do { a = pick([1, 1, 1, -1, 2, 0.5, -0.5, -2]); d = pick([-3, -2, -1, 1, 2, 3]); e = pick([-3, -2, 2, 3]); }
+  while (alt && alt.d === d && alt.e === e);
+  auf = { a, d, e }; opened = new Set();
+}
+function fig8() {
+  const G = G8, { a, d, e } = auf, fn = x => a * (x - d) ** 2 + e;
+  const aT = a === 1 ? '' : a === -1 ? A('−') : A(zf(a));
+  const art = a === 1 ? 'Normalparabel,' : a === -1 ? 'an der x-Achse gespiegelt,' : (Math.abs(a) > 1 ? 'gestreckt,' : 'gestaucht,');
+  return gitter(G) + norm(G) +
+    teil('k', graph(G, fn)) +
+    teil('dp', pf(G, 0, 0, d, 0, 'd')) +
+    teil('ep', pf(G, d, 0, d, e, 'e')) +
+    teil('S', punkt(G, d, e) + text(G.X(d) + (d < 0 ? -14 : 14), G.Y(e) + (a > 0 ? 30 : -30), `S(${zf(d)}|${zf(e)})`, 'tb hl', d < 0 ? 'end' : 'start')) +
+    spalte(690, 50, 640, [
+      { z: ['f(x) = ' + aT + '(x ' + (d > 0 ? '− ' : '+ ') + D(Math.abs(d)) + ')² ' + (e > 0 ? '+ ' : '− ') + E(Math.abs(e))], c: 'th' },
+      { k: 'dz', gap: 20, z: [d > 0 ? `(x − ${d})²: ` + D(`d = ${d}`) + `, also ${d} nach rechts` : `(x + ${-d})²: ` + D(`d = ${zf(d)}`) + `, also ${-d} nach links`] },
+      { k: 'ez', z: [e > 0 ? `+ ${e}: ` + E(`e = ${e}`) + `, also ${e} nach oben` : `− ${-e}: ` + E(`e = ${zf(e)}`) + `, also ${-e} nach unten`] },
+      { k: 'Sz', z: ['Scheitelpunkt S(' + D(zf(d)) + '|' + E(zf(e)) + ')'] },
+      { k: 'az', z: [A('a = ' + zf(a)) + ': ' + art, 'nach ' + (a > 0 ? 'oben' : 'unten') + ' offen'] }
+    ]) + legende(690, 580);
+}
+
+// ---------- 9 Das Wichtigste ----------
+function fig9() {
+  const c2 = 660, r = (y, l, rt) => text(50, y, l) + text(c2, y, rt);
+  return `<rect class="merkbox" x="10" y="10" width="1280" height="610" rx="16"/>` +
+    text(50, 66, 'Parabeln strecken, stauchen und verschieben', 'th') +
+    text(50, 150, 'f(x) = ' + A('a') + '(x − ' + D('d') + ')² + ' + E('e'), 'tv') + text(c2, 150, 'Scheitelpunkt S(' + D('d') + '|' + E('e') + ')', 'tv') +
+    r(240, A('a') + ' positiv: nach oben offen', A('a') + ' negativ: nach unten offen') +
+    r(296, A('a = 2') + ' oder ' + A('a = −2') + ': gestreckt', A('a = 0,5') + ' oder ' + A('a = −0,5') + ': gestaucht') +
+    r(386, '(x − ' + D('2') + ')²: 2 nach rechts', '(x + ' + D('2') + ')²: 2 nach links') +
+    r(476, 'x² ' + E('+ 2') + ': 2 nach oben', 'x² ' + E('− 2') + ': 2 nach unten') +
+    text(50, 566, 'Minus in der Klammer heißt nach rechts.', 'tb');
+}
+
+const STEPS = [
+  { t: 'Die Normalparabel', vb: [1320, 620], parts: ['k', 'S', 'z1', 'z2'], fig: fig1 },
+  { t: 'Strecken und Stauchen', vb: [1400, 620], parts: ['f', 'fk', 'fz', 'g', 'gk', 'gz'], fig: fig2 },
+  { t: 'Nach unten offen', vb: [1320, 620], parts: ['f', 'fk', 'fz', 'g', 'gk', 'gz'], fig: fig3 },
+  { t: 'Nach oben oder unten verschieben', vb: [1250, 630], parts: ['f', 'fk', 'fp', 'fz', 'g', 'gk', 'gp', 'gz'], fig: fig4 },
+  { t: 'Nach rechts oder links verschieben', vb: [1480, 540], parts: ['f', 'fk', 'fp', 'fz', 'g', 'gk', 'gp', 'gd', 'gz'], fig: fig5 },
+  { t: 'Warum nach rechts?', vb: [1300, 600], parts: ['c0', 'c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'p0', 'p1', 'p2', 'p3', 'p4', 'z1', 'z2'], fig: fig6 },
+  { t: 'Scheitelpunktform', vb: [1470, 620], parts: ['dz', 'dp', 'ez', 'ep', 'Sz', 'S', 'az', 'apz', 'ap', 'k'], fig: fig7 },
+  { t: 'Aufgabe: Beschreibe die Parabel', vb: [1340, 620], parts: ['dz', 'dp', 'ez', 'ep', 'Sz', 'S', 'az', 'k'], fig: fig8,
+    enter: neueAufgabe, btns: [{ l: 'Neue Aufgabe', f: neueAufgabe }] },
+  { t: 'Das Wichtigste', noT: 1, vb: [1300, 630], fig: fig9 }
+];
+
+// ---------- Ablauf ----------
+function render() {
+  const st = STEPS[step], ps = st.parts || [];
+  $('title').textContent = st.t;
+  $('title').style.display = st.noT ? 'none' : '';
+  // Das Bild wird jedes Mal als neues Element eingesetzt. So bleiben auf dem iPad keine Reste des alten Stands stehen.
+  const [vw, vh] = st.vb, alt = $('fig'), neu = alt.cloneNode(false);
+  neu.setAttribute('viewBox', `0 0 ${vw} ${vh}`);
+  neu.innerHTML = st.fig();
+  alt.replaceWith(neu);
+  if (shownStep !== step) {
+    shownStep = step;
+    $('extras').innerHTML = (st.btns || []).map((b, i) => `<button data-b="${i}">${b.l}</button>`).join('');
+    $('cnt').textContent = `${step + 1} / ${STEPS.length}`;
+  }
+  $('prev').disabled = step === 0 && !opened.size;
+  $('next').disabled = step === STEPS.length - 1 && ps.every(vis);
+}
+// end: beim Zurückgehen auf der vorigen Folie mit allen Teilen aufgedeckt landen.
+function go(d, end) {
+  const n = step + d; if (n < 0 || n >= STEPS.length) return;
+  step = n; opened = new Set();
+  if (STEPS[step].enter) STEPS[step].enter();
+  if (end) opened = new Set(STEPS[step].parts || []);
+  render();
+}
+// Zurück nimmt immer nur einen Schritt zurück, den zuletzt aufgedeckten Teil. Erst am Anfang einer Folie geht es zur vorigen.
+const back = () => {
+  const k = [...opened].pop();
+  if (k) { opened.delete(k); render(); } else go(-1, true);
+};
+// Weiter deckt erst den nächsten Teil auf. Wenn alles offen ist, geht es zur nächsten Folie.
+const fwd = () => {
+  const k = (STEPS[step].parts || []).find(x => !vis(x));
+  if (k) { opened.add(k); render(); } else go(1);
+};
+$('prev').addEventListener('click', back);
+$('next').addEventListener('click', fwd);
+$('extras').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  STEPS[step].btns[+b.dataset.b].f(); render();
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); fwd(); }
+  else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); back(); }
+});
+// Antippen im Bild deckt den Teil an dieser Stelle auf, nochmal Antippen verdeckt ihn wieder.
+// Das Bild wird bei jedem Zeichnen ersetzt, deshalb hört die Seite selbst auf Tipps ins Bild.
+document.addEventListener('pointerdown', e => {
+  const g = e.target.closest && e.target.closest('#fig [data-k]'); if (!g) return;
+  const k = g.dataset.k;
+  if (opened.has(k)) opened.delete(k); else opened.add(k);
+  render();
+});
+if (STEPS[0].enter) STEPS[0].enter();
+render();
+// Vollbild: Knopf oder Taste F. Nach einem Seitenwechsel holt der erste Tipp das Vollbild zurück.
+(() => {
+  const d = document, el = d.documentElement, b = d.getElementById('fs');
+  if (!b) return;
+  // Als App vom Home-Bildschirm gibt es keine Browserleisten. Vollbild brächte dort nur das X oben links.
+  const app = navigator.standalone === true || matchMedia('(display-mode: standalone)').matches;
+  if (app || !(d.fullscreenEnabled || d.webkitFullscreenEnabled)) { b.hidden = true; return; }
+  const on = () => !!(d.fullscreenElement || d.webkitFullscreenElement);
+  const want = v => { try { if (v === undefined) return sessionStorage.getItem('fs') === '1'; sessionStorage.setItem('fs', v ? '1' : '0'); } catch (e) { return false; } };
+  const call = (o, f) => { if (!f) return; try { const p = f.call(o); if (p && p.catch) p.catch(() => {}); } catch (e) {} };
+  const enter = () => call(el, el.requestFullscreen || el.webkitRequestFullscreen);
+  const exit = () => call(d, d.exitFullscreen || d.webkitExitFullscreen);
+  const toggle = () => { if (on()) { want(false); exit(); } else { want(true); enter(); } };
+  let leaving = false;
+  const sync = () => {
+    const f = on(); el.classList.toggle('fs', f); if (!f) el.classList.remove('wide');
+    b.setAttribute('aria-pressed', f); b.title = f ? 'Vollbild beenden (F)' : 'Vollbild (F)';
+  };
+  const change = () => { sync(); if (!on() && !leaving) want(false); };   // mit X oder Esc beendet
+  b.addEventListener('click', toggle);
+  d.addEventListener('fullscreenchange', change);
+  d.addEventListener('webkitfullscreenchange', change);
+  d.addEventListener('click', e => {
+    const a = e.target.closest('a[href]');
+    if (a) { if (!a.hasAttribute('download')) leaving = true; return; }
+    if (!b.contains(e.target) && !on() && want()) enter();
+  }, true);
+  d.addEventListener('keydown', e => {
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    if (e.key === 'f' || e.key === 'F') { e.preventDefault(); toggle(); }
+    else if (e.key !== 'Escape' && !on() && want()) enter();
+  });
+  addEventListener('pagehide', () => { leaving = true; });
+  addEventListener('pageshow', () => { leaving = false; sync(); });
+  sync();
+})();
+// App vom Home-Bildschirm: Sie hat keine Zurück-Taste. Links führen deshalb nur zu eigenen Seiten, und die haben alle einen Weg zum Menü.
+if (navigator.standalone === true || matchMedia('(display-mode: standalone)').matches) document.addEventListener('click', e => {
+  const a = e.target.closest('a[href]'); if (!a) return;
+  const u = new URL(a.href);
+  if (a.hasAttribute('download') || u.origin !== location.origin || !/(\/|\.html)$/.test(u.pathname)) e.preventDefault();
+}, true);
+// Offline: Nach dem ersten Aufruf liegen alle Stunden und Blätter im Speicher.
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
+</script>
+</body>
+</html>
