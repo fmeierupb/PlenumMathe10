@@ -12,8 +12,8 @@
 <meta name="theme-color" content="#0f766e">
 <title>Parabeln strecken, stauchen und verschieben</title>
 <style>
-:root{--bg:#fbfaf6;--fg:#161a22;--mut:#9aa0ad;--line:#d9d7cf;--grid:#e4e1d8;--c1:#2563eb;--c2:#f08a00;--c3:#12a150;--cr:#d81e1e;--btn:#fff}
-@media (prefers-color-scheme:dark){:root{--bg:#12151b;--fg:#f0f2f6;--mut:#7d8596;--line:#343b48;--grid:#29303b;--c1:#5b9bff;--c2:#ffad33;--c3:#3ddc84;--cr:#ff5c5c;--btn:#1f242d}}
+:root{--bg:#fbfaf6;--fg:#161a22;--mut:#9aa0ad;--line:#d9d7cf;--grid:#e4e1d8;--c1:#2563eb;--c2:#f08a00;--c3:#12a150;--cr:#d81e1e;--cf:#7c3aed;--cg:#e67700;--btn:#fff}
+@media (prefers-color-scheme:dark){:root{--bg:#12151b;--fg:#f0f2f6;--mut:#7d8596;--line:#343b48;--grid:#29303b;--c1:#5b9bff;--c2:#ffad33;--c3:#3ddc84;--cr:#ff5c5c;--cf:#b49bff;--cg:#ffad33;--btn:#1f242d}}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 body{display:flex;flex-direction:column;height:100dvh;padding:12px 16px calc(12px + env(safe-area-inset-bottom));user-select:none;-webkit-user-select:none}
@@ -63,6 +63,7 @@ svg .th{fill:var(--fg);font:700 42px system-ui,sans-serif}
 svg .tb{fill:var(--fg);font:700 30px system-ui,sans-serif}
 /* Beschriftungen im Bild mit Rand in Hintergrundfarbe, damit sie über Linien lesbar bleiben */
 svg .hl{paint-order:stroke;stroke:var(--bg);stroke-width:8px;stroke-linejoin:round}
+svg .kl{font-size:26px}
 svg .tv{fill:var(--fg);font:600 44px system-ui,sans-serif}
 svg .tvh{fill:var(--fg);font:700 38px system-ui,sans-serif}
 svg .tq{fill:var(--mut);font:600 44px system-ui,sans-serif}
@@ -70,6 +71,10 @@ svg .tm{fill:var(--mut);font:600 26px system-ui,sans-serif}
 svg .cd{fill:var(--cr)}
 svg .ce{fill:var(--c3)}
 svg .ca{fill:var(--c1)}
+svg .cf{fill:var(--cf)}
+svg .cg{fill:var(--cg)}
+svg .kf{stroke:var(--cf)}
+svg .kg{stroke:var(--cg)}
 svg .kopf{fill:var(--grid)}
 svg .merkbox{fill:rgba(18,161,80,.08);stroke:var(--c3);stroke-width:3}
 </style>
@@ -92,6 +97,8 @@ const pick = a => a[rnd(0, a.length - 1)];
 const zf = v => (v < 0 ? '−' : '') + String(Math.abs(v)).replace('.', ',');
 // Farben der Parameter wie im Buch: a blau, d rot, e grün. Überall gleich, in Bild und Text.
 const A = s => `<tspan class="ca">${s}</tspan>`, D = s => `<tspan class="cd">${s}</tspan>`, E = s => `<tspan class="ce">${s}</tspan>`;
+// Die Funktionen f und g haben eigene Farben, im Graphen und im Text.
+const KF = s => `<tspan class="cf">${s}</tspan>`, KG = s => `<tspan class="cg">${s}</tspan>`;
 const text = (x, y, s, c = 'tl', a = 'start') => `<text class="${c}" x="${f1(x)}" y="${f1(y)}" text-anchor="${a}" dominant-baseline="central">${s}</text>`;
 
 // ---------- Aufdecken ----------
@@ -129,7 +136,7 @@ function kurve(G, fn, cls = 'pk') {
   }
   return `<path class="${cls}" d="${d}" clip-path="url(#cl)"/>`;
 }
-const graph = (G, fn) => kurve(G, fn, 'hz') + kurve(G, fn);
+const graph = (G, fn, k = '') => kurve(G, fn, 'hz') + kurve(G, fn, 'pk ' + k);
 const norm = G => kurve(G, x => x * x, 'np');
 // Pfeil in Pixeln. c: d rot, e grün, a blau, n schwarz.
 function pfeil(x1, y1, x2, y2, c) {
@@ -162,10 +169,10 @@ const G1 = koord({ x0: -3.5, x1: 3.5, y0: -1, y1: 6, L: 60, T: 50, H: 540 });
 function fig1() {
   const G = G1;
   return gitter(G) +
-    teil('k', graph(G, x => x * x) + text(G.X(2.3) + 14, G.Y(5.29), 'f', 'tb hl')) +
+    teil('k', graph(G, x => x * x, 'kf') + text(G.X(2.3) + 14, G.Y(5.29), 'f', 'tb hl cf')) +
     teil('S', punkt(G, 0, 0) + text(G.X(0) + 16, G.Y(0) + 56, 'S(0|0)', 'tb')) +
     spalte(690, 50, 620, [
-      { z: ['f(x) = x²'], c: 'th' },
+      { z: [KF('f(x)') + ' = x²'], c: 'th' },
       { k: 'z1', gap: 24, z: ['Der tiefste Punkt heißt', 'Scheitelpunkt S(0|0).'] },
       { k: 'z2', gap: 24, z: ['Alle anderen Parabeln', 'entstehen aus der Normalparabel', 'durch Strecken, Stauchen', 'und Verschieben.'] }
     ]);
@@ -176,13 +183,13 @@ const G2 = koord({ x0: -4, x1: 4, y0: -1, y1: 6, L: 60, T: 50, H: 540 });
 function fig2() {
   const G = G2;
   return gitter(G) + norm(G) +
-    teil('fk', graph(G, x => 2 * x * x) + text(G.X(1.62) + 14, G.Y(5.25), 'f', 'tb hl')) +
-    teil('gk', graph(G, x => 0.5 * x * x) + text(G.X(3.1) + 14, G.Y(4.8), 'g', 'tb hl')) +
+    teil('fk', graph(G, x => 2 * x * x, 'kf') + text(G.X(1.62) + 14, G.Y(5.25), 'f', 'tb hl cf')) +
+    teil('gk', graph(G, x => 0.5 * x * x, 'kg') + text(G.X(3.1) + 14, G.Y(4.8), 'g', 'tb hl cg')) +
     spalte(760, 50, 620, [
-      { k: 'f', z: ['f(x) = ' + A('2') + 'x²'], c: 'th' },
-      { k: 'fz', z: [A('a = 2') + ' ist größer als 1.', 'f ist gestreckt, also schmaler.'] },
-      { k: 'g', gap: 40, z: ['g(x) = ' + A('0,5') + 'x²'], c: 'th' },
-      { k: 'gz', z: [A('a = 0,5') + ' liegt zwischen 0 und 1.', 'g ist gestaucht, also breiter.'] }
+      { k: 'f', z: [KF('f(x)') + ' = ' + A('2') + 'x²'], c: 'th' },
+      { k: 'fz', z: [A('a = 2') + ' ist größer als 1.', KF('f') + ' ist gestreckt, also schmaler.'] },
+      { k: 'g', gap: 40, z: [KG('g(x)') + ' = ' + A('0,5') + 'x²'], c: 'th' },
+      { k: 'gz', z: [A('a = 0,5') + ' liegt zwischen 0 und 1.', KG('g') + ' ist gestaucht, also breiter.'] }
     ]) + legende(760, 560);
 }
 
@@ -191,32 +198,32 @@ const G3 = koord({ x0: -4, x1: 4, y0: -6, y1: 2, L: 60, T: 50, H: 540, tkUp: 1 }
 function fig3() {
   const G = G3;
   return gitter(G) + norm(G) +
-    teil('fk', graph(G, x => -x * x) + text(G.X(2.1) + 14, G.Y(-4.41), 'f', 'tb hl')) +
-    teil('gk', graph(G, x => -0.5 * x * x) + text(G.X(3.2) + 14, G.Y(-5.12), 'g', 'tb hl')) +
+    teil('fk', graph(G, x => -x * x, 'kf') + text(G.X(2.1) + 14, G.Y(-4.41), 'f', 'tb hl cf')) +
+    teil('gk', graph(G, x => -0.5 * x * x, 'kg') + text(G.X(3.2) + 14, G.Y(-5.12), 'g', 'tb hl cg')) +
     spalte(690, 50, 620, [
-      { k: 'f', z: ['f(x) = ' + A('−') + 'x²'], c: 'th' },
-      { k: 'fz', z: [A('a = −1') + ' ist negativ.', 'f ist an der x-Achse gespiegelt', 'und nach unten offen.'] },
-      { k: 'g', gap: 40, z: ['g(x) = ' + A('−0,5') + 'x²'], c: 'th' },
-      { k: 'gz', z: [A('a = −0,5') + ' ist negativ und', 'ohne Minus kleiner als 1.', 'g ist gestaucht und', 'nach unten offen.'] }
+      { k: 'f', z: [KF('f(x)') + ' = ' + A('−') + 'x²'], c: 'th' },
+      { k: 'fz', z: [A('a = −1') + ' ist negativ.', KF('f') + ' ist an der x-Achse gespiegelt', 'und nach unten offen.'] },
+      { k: 'g', gap: 40, z: [KG('g(x)') + ' = ' + A('−0,5') + 'x²'], c: 'th' },
+      { k: 'gz', z: [A('a = −0,5') + ' ist negativ und', 'ohne Minus kleiner als 1.', KG('g') + ' ist gestaucht und', 'nach unten offen.'] }
     ]) + legende(690, 580);
 }
 
 // ---------- 4 Nach oben oder unten ----------
-const G4 = koord({ x0: -4.5, x1: 4.5, y0: -4, y1: 7, L: 60, T: 50, H: 550 });
+const G4 = koord({ x0: -4.5, x1: 4.5, y0: -3.5, y1: 6.5, L: 60, T: 50, H: 560 });
 function fig4() {
   const G = G4;
   const hoch = (e, xs) => xs.map(x => pf(G, x, x * x, x, x * x + e, 'e')).join('');
   return gitter(G) + norm(G) +
-    teil('fk', graph(G, x => x * x + 2) + text(G.X(2.05) + 14, G.Y(6.2), 'f', 'tb hl')) +
-    teil('gk', graph(G, x => x * x - 3) + text(G.X(2.7) + 14, G.Y(4.29), 'g', 'tb hl')) +
-    teil('fp', hoch(2, [-2, 0, 2]) + text(G.X(0) + 10, G.Y(1.2), E('+2'), 'tb hl')) +
-    teil('gp', hoch(-3, [-1.5, 0, 1.5]) + text(G.X(0) + 10, G.Y(-1.6), E('−3'), 'tb hl')) +
-    spalte(600, 50, 640, [
-      { k: 'f', z: ['f(x) = x² ' + E('+ 2')], c: 'th' },
+    teil('fk', graph(G, x => x * x + 2, 'kf') + text(G.X(1.9) + 14, G.Y(5.95), 'f', 'tb hl cf')) +
+    teil('gk', graph(G, x => x * x - 3, 'kg') + text(G.X(2.7) + 14, G.Y(4.29), 'g', 'tb hl cg')) +
+    teil('fp', hoch(2, [-2, -1, 0, 1, 2]) + text(G.X(0) + 8, G.Y(1.2), E('+2'), 'tb hl kl')) +
+    teil('gp', hoch(-3, [-2, -1, 0, 1, 2]) + text(G.X(0) + 8, G.Y(-1.6), E('−3'), 'tb hl kl')) +
+    spalte(640, 50, 640, [
+      { k: 'f', z: [KF('f(x)') + ' = x² ' + E('+ 2')], c: 'th' },
       { k: 'fz', z: [E('e = 2') + ': 2 nach oben verschoben', 'Scheitelpunkt S(0|' + E('2') + ')'] },
-      { k: 'g', gap: 40, z: ['g(x) = x² ' + E('− 3')], c: 'th' },
+      { k: 'g', gap: 40, z: [KG('g(x)') + ' = x² ' + E('− 3')], c: 'th' },
       { k: 'gz', z: [E('e = −3') + ': 3 nach unten verschoben', 'Scheitelpunkt S(0|' + E('−3') + ')'] }
-    ]) + legende(600, 570);
+    ]) + legende(640, 580);
 }
 
 // ---------- 5 Nach rechts oder links ----------
@@ -224,14 +231,14 @@ const G5 = koord({ x0: -6, x1: 5, y0: -1, y1: 6, L: 60, T: 50, H: 450 });
 function fig5() {
   const G = G5;
   return gitter(G) + norm(G) +
-    teil('fk', graph(G, x => (x - 2) ** 2) + text(G.X(4.3) + 14, G.Y(5.29), 'f', 'tb hl')) +
-    teil('gk', graph(G, x => (x + 3) ** 2) + text(G.X(-5.3) - 14, G.Y(5.29), 'g', 'tb hl', 'end')) +
+    teil('fk', graph(G, x => (x - 2) ** 2, 'kf') + text(G.X(4.3) + 14, G.Y(5.29), 'f', 'tb hl cf')) +
+    teil('gk', graph(G, x => (x + 3) ** 2, 'kg') + text(G.X(-5.3) - 14, G.Y(5.29), 'g', 'tb hl cg', 'end')) +
     teil('fp', pf(G, 0, 0, 2, 0, 'd') + pf(G, 2, 4, 4, 4, 'd') + text(G.X(3), G.Y(4) - 26, D('+2'), 'tb hl', 'middle')) +
     teil('gp', pf(G, 0, 0, -3, 0, 'd') + pf(G, -2, 4, -5, 4, 'd') + text(G.X(-3.5), G.Y(4) - 26, D('−3'), 'tb hl', 'middle')) +
     spalte(850, 30, 620, [
-      { k: 'f', z: ['f(x) = (x − ' + D('2') + ')²'], c: 'th' },
+      { k: 'f', z: [KF('f(x)') + ' = (x − ' + D('2') + ')²'], c: 'th' },
       { k: 'fz', z: [D('d = 2') + ': 2 nach rechts verschoben', 'Scheitelpunkt S(' + D('2') + '|0)'] },
-      { k: 'g', gap: 34, z: ['g(x) = (x + ' + D('3') + ')²'], c: 'th' },
+      { k: 'g', gap: 34, z: [KG('g(x)') + ' = (x + ' + D('3') + ')²'], c: 'th' },
       { k: 'gd', z: ['(x + 3)² = (x − (' + D('−3') + '))²'] },
       { k: 'gz', z: [D('d = −3') + ': 3 nach links verschoben', 'Scheitelpunkt S(' + D('−3') + '|0)'] }
     ]) + legende(850, 500);
@@ -250,14 +257,14 @@ function zeile6(y, kopf, werte) {
 }
 function fig6() {
   const y0 = T6.T, y1 = y0 + T6.rh, y2 = y1 + T6.rh + T6.gap;
-  let s = zeile6(y0, 'x', X6.map(zf)) + zeile6(y1, 'y = x²', X6.map(x => zf(x * x))) + zeile6(y2, 'f(x) = (x − ' + D('2') + ')²', X6.map(() => null));
+  let s = zeile6(y0, 'x', X6.map(zf)) + zeile6(y1, 'y = x²', X6.map(x => zf(x * x))) + zeile6(y2, KF('f(x)') + ' = (x − ' + D('2') + ')²', X6.map(() => null));
   X6.forEach((x, i) => {
     const y = y2 + T6.rh / 2;
     s += teil('c' + i, `<rect class="hr" x="${cx6(i) - T6.cw / 2}" y="${y2}" width="${T6.cw}" height="${T6.rh}"/>` + text(cx6(i), y, zf((x - 2) ** 2), 'tv', 'middle'), text(cx6(i), y, '?', 'tq', 'middle'));
   });
   for (let i = 0; i < 5; i++) s += teil('p' + i, pfeil(cx6(i), y1 + T6.rh + 14, cx6(i + 2), y2 - 14, 'd'));
   return s + spalte(T6.L + 12, y2 + T6.rh + 30, 1200, [
-    { k: 'z1', z: ['f hat dieselben Werte wie y = x², nur 2 Stellen weiter rechts.'] },
+    { k: 'z1', z: [KF('f') + ' hat dieselben Werte wie y = x², nur 2 Stellen weiter rechts.'] },
     { k: 'z2', gap: 14, z: ['Bei x = ' + D('2') + ' ist die Klammer null: (2 − ' + D('2') + ')² = 0.', 'Dort liegt der Scheitelpunkt S(' + D('2') + '|0).'] }
   ]);
 }
@@ -267,7 +274,7 @@ const G7 = koord({ x0: -6, x1: 2, y0: -1, y1: 6, L: 60, T: 50, H: 540 });
 function fig7() {
   const G = G7;
   return gitter(G) + norm(G) +
-    teil('k', graph(G, x => 2 * (x + 3) ** 2 + 2) + text(G.X(-1.48) + 14, G.Y(5.8), 'f', 'tb hl')) +
+    teil('k', graph(G, x => 2 * (x + 3) ** 2 + 2, 'kf') + text(G.X(-1.48) + 14, G.Y(5.8), 'f', 'tb hl cf')) +
     teil('dp', pf(G, 0, 0, -3, 0, 'd') + text(G.X(-1.5), G.Y(0) - 26, D('−3'), 'tb hl', 'middle')) +
     teil('ep', pf(G, -3, 0, -3, 2, 'e') + text(G.X(-3) + 12, G.Y(1), E('+2'), 'tb hl')) +
     teil('ap', pf(G, -3, 2, -2, 2, 'n') + text(G.X(-2.5), G.Y(2) + 28, '1', 'tb hl', 'middle') + pf(G, -2, 2, -2, 4, 'a') + text(G.X(-2) + 14, G.Y(3), A('2'), 'tb hl')) +
@@ -275,7 +282,7 @@ function fig7() {
     spalte(780, 40, 680, [
       { z: ['f(x) = ' + A('a') + '(x − ' + D('d') + ')² + ' + E('e')], c: 'th' },
       { z: ['Scheitelpunkt S(' + D('d') + '|' + E('e') + ')'] },
-      { gap: 34, z: ['f(x) = ' + A('2') + '(x + ' + D('3') + ')² + ' + E('2')], c: 'th' },
+      { gap: 34, z: [KF('f(x)') + ' = ' + A('2') + '(x + ' + D('3') + ')² + ' + E('2')], c: 'th' },
       { k: 'dz', z: ['(x + 3)²: ' + D('d = −3') + ', also 3 nach links'] },
       { k: 'ez', z: ['+ 2: ' + E('e = 2') + ', also 2 nach oben'] },
       { k: 'Sz', z: ['Scheitelpunkt S(' + D('−3') + '|' + E('2') + ')'] },
@@ -299,12 +306,12 @@ function fig8() {
   const aT = a === 1 ? '' : a === -1 ? A('−') : A(zf(a));
   const art = a === 1 ? 'Normalparabel,' : a === -1 ? 'an der x-Achse gespiegelt,' : (Math.abs(a) > 1 ? 'gestreckt,' : 'gestaucht,');
   return gitter(G) + norm(G) +
-    teil('k', graph(G, fn)) +
+    teil('k', graph(G, fn, 'kf')) +
     teil('dp', pf(G, 0, 0, d, 0, 'd')) +
     teil('ep', pf(G, d, 0, d, e, 'e')) +
     teil('S', punkt(G, d, e) + text(G.X(d) + (d < 0 ? -14 : 14), G.Y(e) + (a > 0 ? 30 : -30), `S(${zf(d)}|${zf(e)})`, 'tb hl', d < 0 ? 'end' : 'start')) +
     spalte(690, 50, 640, [
-      { z: ['f(x) = ' + aT + '(x ' + (d > 0 ? '− ' : '+ ') + D(Math.abs(d)) + ')² ' + (e > 0 ? '+ ' : '− ') + E(Math.abs(e))], c: 'th' },
+      { z: [KF('f(x)') + ' = ' + aT + '(x ' + (d > 0 ? '− ' : '+ ') + D(Math.abs(d)) + ')² ' + (e > 0 ? '+ ' : '− ') + E(Math.abs(e))], c: 'th' },
       { k: 'dz', gap: 20, z: [d > 0 ? `(x − ${d})²: ` + D(`d = ${d}`) + `, also ${d} nach rechts` : `(x + ${-d})²: ` + D(`d = ${zf(d)}`) + `, also ${-d} nach links`] },
       { k: 'ez', z: [e > 0 ? `+ ${e}: ` + E(`e = ${e}`) + `, also ${e} nach oben` : `− ${-e}: ` + E(`e = ${zf(e)}`) + `, also ${-e} nach unten`] },
       { k: 'Sz', z: ['Scheitelpunkt S(' + D(zf(d)) + '|' + E(zf(e)) + ')'] },
@@ -329,7 +336,7 @@ const STEPS = [
   { t: 'Die Normalparabel', vb: [1320, 620], parts: ['k', 'S', 'z1', 'z2'], fig: fig1 },
   { t: 'Strecken und Stauchen', vb: [1400, 620], parts: ['f', 'fk', 'fz', 'g', 'gk', 'gz'], fig: fig2 },
   { t: 'Nach unten offen', vb: [1320, 620], parts: ['f', 'fk', 'fz', 'g', 'gk', 'gz'], fig: fig3 },
-  { t: 'Nach oben oder unten verschieben', vb: [1250, 630], parts: ['f', 'fk', 'fp', 'fz', 'g', 'gk', 'gp', 'gz'], fig: fig4 },
+  { t: 'Nach oben oder unten verschieben', vb: [1290, 630], parts: ['f', 'fk', 'fp', 'fz', 'g', 'gk', 'gp', 'gz'], fig: fig4 },
   { t: 'Nach rechts oder links verschieben', vb: [1480, 540], parts: ['f', 'fk', 'fp', 'fz', 'g', 'gk', 'gp', 'gd', 'gz'], fig: fig5 },
   { t: 'Warum nach rechts?', vb: [1300, 600], parts: ['c0', 'c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'p0', 'p1', 'p2', 'p3', 'p4', 'z1', 'z2'], fig: fig6 },
   { t: 'Scheitelpunktform', vb: [1470, 620], parts: ['dz', 'dp', 'ez', 'ep', 'Sz', 'S', 'az', 'apz', 'ap', 'k'], fig: fig7 },
@@ -339,6 +346,28 @@ const STEPS = [
 ];
 
 // ---------- Ablauf ----------
+// Farbige Stücke einer Zeile werden eigene Textelemente, gemessen und nebeneinander gesetzt.
+// Eingeschachtelte tspans stehen nicht in jedem Browser gleich groß und auf gleicher Höhe.
+function laeufe(svg) {
+  const ns = 'http://www.w3.org/2000/svg';
+  svg.querySelectorAll('text').forEach(t => {
+    if (!t.querySelector('tspan')) return;
+    const anchor = t.getAttribute('text-anchor') || 'start', x0 = +t.getAttribute('x'), cls = t.getAttribute('class');
+    const els = [...t.childNodes].map(n => [n.textContent.replace(/ /g, '\u00a0'), n.nodeType === 1 ? n.getAttribute('class') : '']).filter(r => r[0]).map(([str, c]) => {
+      const e = document.createElementNS(ns, 'text');
+      for (const at of t.attributes) e.setAttribute(at.name, at.value);
+      e.setAttribute('text-anchor', 'start');
+      if (c) e.setAttribute('class', cls + ' ' + c);
+      e.textContent = str;
+      t.parentNode.insertBefore(e, t);
+      return e;
+    });
+    t.remove();
+    const w = els.map(e => e.getComputedTextLength()), sum = w.reduce((a, b) => a + b, 0);
+    let x = anchor === 'middle' ? x0 - sum / 2 : anchor === 'end' ? x0 - sum : x0;
+    els.forEach((e, i) => { e.setAttribute('x', x.toFixed(1)); x += w[i]; });
+  });
+}
 function render() {
   const st = STEPS[step], ps = st.parts || [];
   $('title').textContent = st.t;
@@ -348,6 +377,7 @@ function render() {
   neu.setAttribute('viewBox', `0 0 ${vw} ${vh}`);
   neu.innerHTML = st.fig();
   alt.replaceWith(neu);
+  laeufe(neu);
   if (shownStep !== step) {
     shownStep = step;
     $('extras').innerHTML = (st.btns || []).map((b, i) => `<button data-b="${i}">${b.l}</button>`).join('');
