@@ -46,6 +46,7 @@
   pfeil/.style={-{Stealth[length=2.4mm,width=2mm]}, line width=1.2pt},
   lab/.style={inner sep=1pt, font=\normalsize}
 }
+% Jede Zeichnung hat ihren eigenen Maßstab, damit sie die rechte Spalte neben ihrem Text ausfüllt.
 % Formel, eingerückter Spiegelstrich, Beschriftung. Die Striche stehen untereinander.
 % Buchaufgaben im eigenen Rahmen, mit Abstand zu den Informationen darüber.
 \newcommand{\buch}[1]{\par\vspace{0.45cm}\noindent{\setlength{\fboxsep}{5pt}\setlength{\fboxrule}{0.8pt}%
@@ -68,7 +69,7 @@ $h(x) = -x^2$ & -- & nach unten offen\\[5pt]
 $a > 0$ & -- & nach oben offen\\
 $a < 0$ & -- & nach unten offen
 \end{liste}}{%
-\begin{tikzpicture}[x=\sk,y=\sk]
+\begin{tikzpicture}[x=0.64cm,y=0.64cm]
   \gitter{-3.5}{3.5}{-3.5}{4.5}
   \achsen{-3.5}{3.5}{-3.5}{4.5}{-3,-2,-1,1,2,3}{-3,-2,-1,1,2,3,4}
   \begin{scope}\clip (-3.5,-3.5) rectangle (3.5,4.5);
@@ -91,7 +92,7 @@ $f(x) = x^2 + 2$ & -- & um 2 nach oben\\
 $g(x) = x^2 - 3$ & -- & um 3 nach unten
 \end{liste}
 \buch{Buch S.\,44 Nr.\,2, 5, 8\\ Buch S.\,45 Nr.\,1, 3, 4}}{%
-\begin{tikzpicture}[x=\sk,y=\sk]
+\begin{tikzpicture}[x=0.64cm,y=0.64cm]
   \gitter{-3.5}{3.5}{-3.5}{4.5}
   \draw[schub] (0,0) -- (0,2);
   \draw[schub] (0,0) -- (0,-3);
@@ -121,7 +122,7 @@ $g(x) = (x + 3)^2$ & -- & um 3 nach links
 \end{liste}\par\smallskip
 \textbf{Minus in der Klammer heißt nach rechts.}
 \buch{Buch S.\,48 Nr.\,2, 4, 5\\ Buch S.\,49 Nr.\,1, 3, 5}}{%
-\begin{tikzpicture}[x=\sk,y=\sk]
+\begin{tikzpicture}[x=0.72cm,y=0.72cm]
   \gitter{-5.5}{3.5}{-1}{4.5}
   \draw[schub] (0,0) -- (2,0);
   \draw[schub] (0,0) -- (-3,0);
@@ -151,9 +152,9 @@ $d = -3$ & -- & um 3 nach links\\
 $e = 2$ & -- & um 2 nach oben\\
 $S(-3|2)$ & -- & Scheitelpunkt
 \end{liste}\par\smallskip
-Von $S$ aus 1 nach rechts\par und $a$ nach oben.
+Von $S$ aus 1 nach rechts und $a$ nach oben.
 \buch{Buch S.\,48 Nr.\,6, 8, 9\\ Buch S.\,49 Nr.\,6, 8, 9}}{%
-\begin{tikzpicture}[x=\sk,y=\sk]
+\begin{tikzpicture}[x=0.88cm,y=0.88cm]
   \gitter{-5.5}{1.5}{-1}{5.5}
   \draw[schub] (0,0) -- (-3,0);
   \draw[schub] (-3,0) -- (-3,2);
