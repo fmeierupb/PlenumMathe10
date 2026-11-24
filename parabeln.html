@@ -75,6 +75,8 @@ svg .cf{fill:var(--cf)}
 svg .cg{fill:var(--cg)}
 svg .kf{stroke:var(--cf)}
 svg .kg{stroke:var(--cg)}
+svg .kn{stroke:var(--mut)}
+svg .cn{fill:var(--mut)}
 svg .kopf{fill:var(--grid)}
 svg .merkbox{fill:rgba(18,161,80,.08);stroke:var(--c3);stroke-width:3}
 </style>
@@ -169,10 +171,10 @@ const G1 = koord({ x0: -3.5, x1: 3.5, y0: -1, y1: 6, L: 60, T: 50, H: 540 });
 function fig1() {
   const G = G1;
   return gitter(G) +
-    teil('k', graph(G, x => x * x, 'kf') + text(G.X(2.3) + 14, G.Y(5.29), 'f', 'tb hl cf')) +
+    teil('k', graph(G, x => x * x, 'kn') + text(G.X(-2.37) - 14, G.Y(5.6), 'y = x²', 'tb hl cn', 'end')) +
     teil('S', punkt(G, 0, 0) + text(G.X(0) + 16, G.Y(0) + 56, 'S(0|0)', 'tb')) +
     spalte(690, 50, 620, [
-      { z: [KF('f(x)') + ' = x²'], c: 'th' },
+      { z: ['y = x²'], c: 'th' },
       { k: 'z1', gap: 24, z: ['Der tiefste Punkt heißt', 'Scheitelpunkt S(0|0).'] },
       { k: 'z2', gap: 24, z: ['Alle anderen Parabeln', 'entstehen aus der Normalparabel', 'durch Strecken, Stauchen', 'und Verschieben.'] }
     ]);
@@ -220,9 +222,9 @@ function fig4() {
     teil('gp', hoch(-3, [-2, -1, 0, 1, 2]) + text(G.X(0) + 8, G.Y(-1.6), E('−3'), 'tb hl kl')) +
     spalte(640, 50, 640, [
       { k: 'f', z: [KF('f(x)') + ' = x² ' + E('+ 2')], c: 'th' },
-      { k: 'fz', z: [E('e = 2') + ': 2 nach oben verschoben', 'Scheitelpunkt S(0|' + E('2') + ')'] },
+      { k: 'fz', z: [E('e = 2') + ': ' + E('2') + ' nach oben verschoben', 'Scheitelpunkt S(0|' + E('2') + ')'] },
       { k: 'g', gap: 40, z: [KG('g(x)') + ' = x² ' + E('− 3')], c: 'th' },
-      { k: 'gz', z: [E('e = −3') + ': 3 nach unten verschoben', 'Scheitelpunkt S(0|' + E('−3') + ')'] }
+      { k: 'gz', z: [E('e = −3') + ': ' + E('3') + ' nach unten verschoben', 'Scheitelpunkt S(0|' + E('−3') + ')'] }
     ]) + legende(640, 580);
 }
 
@@ -237,10 +239,10 @@ function fig5() {
     teil('gp', pf(G, 0, 0, -3, 0, 'd') + pf(G, -2, 4, -5, 4, 'd') + text(G.X(-3.5), G.Y(4) - 26, D('−3'), 'tb hl', 'middle')) +
     spalte(850, 30, 620, [
       { k: 'f', z: [KF('f(x)') + ' = (x − ' + D('2') + ')²'], c: 'th' },
-      { k: 'fz', z: [D('d = 2') + ': 2 nach rechts verschoben', 'Scheitelpunkt S(' + D('2') + '|0)'] },
+      { k: 'fz', z: [D('d = 2') + ': ' + D('2') + ' nach rechts verschoben', 'Scheitelpunkt S(' + D('2') + '|0)'] },
       { k: 'g', gap: 34, z: [KG('g(x)') + ' = (x + ' + D('3') + ')²'], c: 'th' },
-      { k: 'gd', z: ['(x + 3)² = (x − (' + D('−3') + '))²'] },
-      { k: 'gz', z: [D('d = −3') + ': 3 nach links verschoben', 'Scheitelpunkt S(' + D('−3') + '|0)'] }
+      { k: 'gd', z: ['(x + ' + D('3') + ')² = (x − (' + D('−3') + '))²'] },
+      { k: 'gz', z: [D('d = −3') + ': ' + D('3') + ' nach links verschoben', 'Scheitelpunkt S(' + D('−3') + '|0)'] }
     ]) + legende(850, 500);
 }
 
@@ -264,8 +266,8 @@ function fig6() {
   });
   for (let i = 0; i < 5; i++) s += teil('p' + i, pfeil(cx6(i), y1 + T6.rh + 14, cx6(i + 2), y2 - 14, 'd'));
   return s + spalte(T6.L + 12, y2 + T6.rh + 30, 1200, [
-    { k: 'z1', z: [KF('f') + ' hat dieselben Werte wie y = x², nur 2 Stellen weiter rechts.'] },
-    { k: 'z2', gap: 14, z: ['Bei x = ' + D('2') + ' ist die Klammer null: (2 − ' + D('2') + ')² = 0.', 'Dort liegt der Scheitelpunkt S(' + D('2') + '|0).'] }
+    { k: 'z1', z: [KF('f') + ' hat dieselben Werte wie y = x², nur ' + D('2') + ' Stellen weiter rechts.'] },
+    { k: 'z2', gap: 14, z: ['Bei x = ' + D('2') + ' ist die Klammer null: (' + D('2') + ' − ' + D('2') + ')² = 0.', 'Dort liegt der Scheitelpunkt S(' + D('2') + '|0).'] }
   ]);
 }
 
@@ -278,13 +280,13 @@ function fig7() {
     teil('dp', pf(G, 0, 0, -3, 0, 'd') + text(G.X(-1.5), G.Y(0) - 26, D('−3'), 'tb hl', 'middle')) +
     teil('ep', pf(G, -3, 0, -3, 2, 'e') + text(G.X(-3) + 12, G.Y(1), E('+2'), 'tb hl')) +
     teil('ap', pf(G, -3, 2, -2, 2, 'n') + text(G.X(-2.5), G.Y(2) + 28, '1', 'tb hl', 'middle') + pf(G, -2, 2, -2, 4, 'a') + text(G.X(-2) + 14, G.Y(3), A('2'), 'tb hl')) +
-    teil('S', punkt(G, -3, 2) + text(G.X(-3) - 14, G.Y(2) + 32, 'S(−3|2)', 'tb hl', 'end')) +
+    teil('S', punkt(G, -3, 2) + text(G.X(-3) - 14, G.Y(2) + 32, 'S(' + D('−3') + '|' + E('2') + ')', 'tb hl', 'end')) +
     spalte(780, 40, 680, [
       { z: ['f(x) = ' + A('a') + '(x − ' + D('d') + ')² + ' + E('e')], c: 'th' },
       { z: ['Scheitelpunkt S(' + D('d') + '|' + E('e') + ')'] },
-      { gap: 34, z: [KF('f(x)') + ' = ' + A('2') + '(x + ' + D('3') + ')² + ' + E('2')], c: 'th' },
-      { k: 'dz', z: ['(x + 3)²: ' + D('d = −3') + ', also 3 nach links'] },
-      { k: 'ez', z: ['+ 2: ' + E('e = 2') + ', also 2 nach oben'] },
+      { gap: 34, z: [KF('f(x)') + ' = ' + A('2') + '(x + ' + D('3') + ')² ' + E('+ 2')], c: 'th' },
+      { k: 'dz', z: ['(x + ' + D('3') + ')²: ' + D('d = −3') + ', also ' + D('3') + ' nach links'] },
+      { k: 'ez', z: [E('+ 2') + ': ' + E('e = 2') + ', also ' + E('2') + ' nach oben'] },
       { k: 'Sz', z: ['Scheitelpunkt S(' + D('−3') + '|' + E('2') + ')'] },
       { k: 'az', z: [A('a = 2') + ': gestreckt, nach oben offen'] },
       { k: 'apz', z: ['Von S aus 1 nach rechts', 'und ' + A('2') + ' nach oben.'] }
@@ -309,11 +311,11 @@ function fig8() {
     teil('k', graph(G, fn, 'kf')) +
     teil('dp', pf(G, 0, 0, d, 0, 'd')) +
     teil('ep', pf(G, d, 0, d, e, 'e')) +
-    teil('S', punkt(G, d, e) + text(G.X(d) + (d < 0 ? -14 : 14), G.Y(e) + (a > 0 ? 30 : -30), `S(${zf(d)}|${zf(e)})`, 'tb hl', d < 0 ? 'end' : 'start')) +
+    teil('S', punkt(G, d, e) + text(G.X(d) + (d < 0 ? -14 : 14), G.Y(e) + (a > 0 ? 30 : -30), 'S(' + D(zf(d)) + '|' + E(zf(e)) + ')', 'tb hl', d < 0 ? 'end' : 'start')) +
     spalte(690, 50, 640, [
-      { z: [KF('f(x)') + ' = ' + aT + '(x ' + (d > 0 ? '− ' : '+ ') + D(Math.abs(d)) + ')² ' + (e > 0 ? '+ ' : '− ') + E(Math.abs(e))], c: 'th' },
-      { k: 'dz', gap: 20, z: [d > 0 ? `(x − ${d})²: ` + D(`d = ${d}`) + `, also ${d} nach rechts` : `(x + ${-d})²: ` + D(`d = ${zf(d)}`) + `, also ${-d} nach links`] },
-      { k: 'ez', z: [e > 0 ? `+ ${e}: ` + E(`e = ${e}`) + `, also ${e} nach oben` : `− ${-e}: ` + E(`e = ${zf(e)}`) + `, also ${-e} nach unten`] },
+      { z: [KF('f(x)') + ' = ' + aT + '(x ' + (d > 0 ? '− ' : '+ ') + D(Math.abs(d)) + ')² ' + E((e > 0 ? '+ ' : '− ') + Math.abs(e))], c: 'th' },
+      { k: 'dz', gap: 20, z: [d > 0 ? '(x − ' + D(d) + ')²: ' + D(`d = ${d}`) + ', also ' + D(d) + ' nach rechts' : '(x + ' + D(-d) + ')²: ' + D(`d = ${zf(d)}`) + ', also ' + D(-d) + ' nach links'] },
+      { k: 'ez', z: [e > 0 ? E(`+ ${e}`) + ': ' + E(`e = ${e}`) + ', also ' + E(e) + ' nach oben' : E(`− ${-e}`) + ': ' + E(`e = ${zf(e)}`) + ', also ' + E(-e) + ' nach unten'] },
       { k: 'Sz', z: ['Scheitelpunkt S(' + D(zf(d)) + '|' + E(zf(e)) + ')'] },
       { k: 'az', z: [A('a = ' + zf(a)) + ': ' + art, 'nach ' + (a > 0 ? 'oben' : 'unten') + ' offen'] }
     ]) + legende(690, 580);
@@ -327,8 +329,8 @@ function fig9() {
     text(50, 150, 'f(x) = ' + A('a') + '(x − ' + D('d') + ')² + ' + E('e'), 'tv') + text(c2, 150, 'Scheitelpunkt S(' + D('d') + '|' + E('e') + ')', 'tv') +
     r(240, A('a') + ' positiv: nach oben offen', A('a') + ' negativ: nach unten offen') +
     r(296, A('a = 2') + ' oder ' + A('a = −2') + ': gestreckt', A('a = 0,5') + ' oder ' + A('a = −0,5') + ': gestaucht') +
-    r(386, '(x − ' + D('2') + ')²: 2 nach rechts', '(x + ' + D('2') + ')²: 2 nach links') +
-    r(476, 'x² ' + E('+ 2') + ': 2 nach oben', 'x² ' + E('− 2') + ': 2 nach unten') +
+    r(386, '(x − ' + D('2') + ')²: ' + D('2') + ' nach rechts', '(x + ' + D('2') + ')²: ' + D('2') + ' nach links') +
+    r(476, 'x² ' + E('+ 2') + ': ' + E('2') + ' nach oben', 'x² ' + E('− 2') + ': ' + E('2') + ' nach unten') +
     text(50, 566, 'Minus in der Klammer heißt nach rechts.', 'tb');
 }
 
