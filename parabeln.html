@@ -12,10 +12,10 @@
 <meta name="theme-color" content="#0f766e">
 <title>Parabeln strecken, stauchen und verschieben</title>
 <style>
-/* Farben: a Petrol, d Orange, e Grün, f Violett, g Türkis, Normalparabel Hellgrau */
-:root{--bg:#fbfaf6;--fg:#161a22;--mut:#9aa0ad;--line:#d9d7cf;--grid:#e4e1d8;--c1:#005f73;--cr:#cc6600;--c3:#4f8a10;--cf:#7b3f9e;--cg:#0a9396;--np:#a6a6a6;--btn:#fff}
+/* Farben: a Petrol, d Orange, e Grün, f Magenta, g Königsblau, Normalparabel Hellgrau */
+:root{--bg:#fbfaf6;--fg:#161a22;--mut:#9aa0ad;--line:#d9d7cf;--grid:#e4e1d8;--c1:#005f73;--cr:#cc6600;--c3:#4f8a10;--cf:#c2185b;--cg:#2457d6;--np:#a6a6a6;--btn:#fff}
 /* Im Dunkeln dieselben Farbtöne, nur heller, damit sie sich vom Hintergrund abheben */
-@media (prefers-color-scheme:dark){:root{--bg:#12151b;--fg:#f0f2f6;--mut:#8b93a5;--line:#343b48;--grid:#29303b;--c1:#6fa8dc;--cr:#f08a2a;--c3:#8cc84b;--cf:#bb8ee0;--cg:#2ec4c6;--np:#a6a6a6;--btn:#1f242d}}
+@media (prefers-color-scheme:dark){:root{--bg:#12151b;--fg:#f0f2f6;--mut:#8b93a5;--line:#343b48;--grid:#29303b;--c1:#4fc1b5;--cr:#f08a2a;--c3:#8cc84b;--cf:#ff5fa2;--cg:#6c9cff;--np:#a6a6a6;--btn:#1f242d}}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 body{display:flex;flex-direction:column;height:100dvh;padding:12px 16px calc(12px + env(safe-area-inset-bottom));user-select:none;-webkit-user-select:none}
@@ -229,9 +229,9 @@ function fig4() {
     teil('gp', hoch(-3, [-2, -1, 0, 1, 2]) + text(G.X(0) + 8, G.Y(-1.6), E('−3'), 'tb kl')) +
     spalte(640, 50, 640, [
       { k: 'f', z: [KF('f(x)') + ' = x² ' + E('+ 2')], c: 'th' },
-      { k: 'fz', z: [[E('e = 2'), E('2') + ' nach oben verschoben'], 'Scheitelpunkt S(0|' + E('2') + ')'] },
+      { k: 'fz', z: [[E('e = 2'), 'um ' + E('2') + ' nach oben verschoben'], 'Scheitelpunkt S(0|' + E('2') + ')'] },
       { k: 'g', gap: 40, z: [KG('g(x)') + ' = x² ' + E('− 3')], c: 'th' },
-      { k: 'gz', z: [[E('e = −3'), E('3') + ' nach unten verschoben'], 'Scheitelpunkt S(0|' + E('−3') + ')'] }
+      { k: 'gz', z: [[E('e = −3'), 'um ' + E('3') + ' nach unten verschoben'], 'Scheitelpunkt S(0|' + E('−3') + ')'] }
     ], 150) + legende(640, 580);
 }
 
@@ -246,10 +246,10 @@ function fig5() {
     teil('gp', pf(G, 0, 0, -3, 0, 'd') + pf(G, -2, 4, -5, 4, 'd') + text(G.X(-3.5), G.Y(4) - 26, D('−3'), 'tb', 'middle')) +
     spalte(850, 30, 620, [
       { k: 'f', z: [KF('f(x)') + ' = (x − ' + D('2') + ')²'], c: 'th' },
-      { k: 'fz', z: [[D('d = 2'), D('2') + ' nach rechts verschoben'], 'Scheitelpunkt S(' + D('2') + '|0)'] },
+      { k: 'fz', z: [[D('d = 2'), 'um ' + D('2') + ' nach rechts verschoben'], 'Scheitelpunkt S(' + D('2') + '|0)'] },
       { k: 'g', gap: 34, z: [KG('g(x)') + ' = (x + ' + D('3') + ')²'], c: 'th' },
       { k: 'gd', z: ['(x + ' + D('3') + ')² = (x − (' + D('−3') + '))²'] },
-      { k: 'gz', z: [[D('d = −3'), D('3') + ' nach links verschoben'], 'Scheitelpunkt S(' + D('−3') + '|0)'] }
+      { k: 'gz', z: [[D('d = −3'), 'um ' + D('3') + ' nach links verschoben'], 'Scheitelpunkt S(' + D('−3') + '|0)'] }
     ], 150) + legende(850, 500);
 }
 
@@ -292,8 +292,8 @@ function fig7() {
       { z: ['f(x) = ' + A('a') + '(x − ' + D('d') + ')² + ' + E('e')], c: 'th' },
       { z: ['Scheitelpunkt S(' + D('d') + '|' + E('e') + ')'] },
       { gap: 34, z: [KF('f(x)') + ' = ' + A('2') + '(x + ' + D('3') + ')² ' + E('+ 2')], c: 'th' },
-      { k: 'dz', z: [['(x + ' + D('3') + ')²;  ' + D('d = −3'), D('3') + ' nach links']] },
-      { k: 'ez', z: [[E('+ 2') + ';  ' + E('e = 2'), E('2') + ' nach oben']] },
+      { k: 'dz', z: [['(x + ' + D('3') + ')²;  ' + D('d = −3'), 'um ' + D('3') + ' nach links']] },
+      { k: 'ez', z: [[E('+ 2') + ';  ' + E('e = 2'), 'um ' + E('2') + ' nach oben']] },
       { k: 'Sz', z: ['Scheitelpunkt S(' + D('−3') + '|' + E('2') + ')'] },
       { k: 'az', z: [[A('a = 2'), 'gestreckt,'], ['', 'nach oben offen']] },
       { k: 'apz', z: ['Von S aus 1 nach rechts', 'und ' + A('2') + ' nach oben.'] }
@@ -314,8 +314,8 @@ function fig8() {
   const G = G8, { a, d, e } = auf, fn = x => a * (x - d) ** 2 + e;
   const aT = a === 1 ? '' : a === -1 ? A('−') : A(zf(a));
   const art = a === 1 ? 'Normalparabel,' : a === -1 ? 'an der x-Achse gespiegelt,' : (Math.abs(a) > 1 ? 'gestreckt,' : 'gestaucht,');
-  const dz = d > 0 ? ['(x − ' + D(d) + ')²;  ' + D(`d = ${d}`), D(d) + ' nach rechts'] : ['(x + ' + D(-d) + ')²;  ' + D(`d = ${zf(d)}`), D(-d) + ' nach links'];
-  const ez = e > 0 ? [E(`+ ${e}`) + ';  ' + E(`e = ${e}`), E(e) + ' nach oben'] : [E(`− ${-e}`) + ';  ' + E(`e = ${zf(e)}`), E(-e) + ' nach unten'];
+  const dz = d > 0 ? ['(x − ' + D(d) + ')²;  ' + D(`d = ${d}`), 'um ' + D(d) + ' nach rechts'] : ['(x + ' + D(-d) + ')²;  ' + D(`d = ${zf(d)}`), 'um ' + D(-d) + ' nach links'];
+  const ez = e > 0 ? [E(`+ ${e}`) + ';  ' + E(`e = ${e}`), 'um ' + E(e) + ' nach oben'] : [E(`− ${-e}`) + ';  ' + E(`e = ${zf(e)}`), 'um ' + E(-e) + ' nach unten'];
   return gitter(G) +
     teil('k', graph(G, fn, 'kf')) +
     teil('dp', pf(G, 0, 0, d, 0, 'd')) +
@@ -338,8 +338,8 @@ function fig9() {
     text(50, 150, 'f(x) = ' + A('a') + '(x − ' + D('d') + ')² + ' + E('e'), 'tv') + text(c2, 150, 'Scheitelpunkt S(' + D('d') + '|' + E('e') + ')', 'tv') +
     r(240, [A('a') + ' > 0', 'nach oben offen'], [A('a') + ' < 0', 'nach unten offen'], 260, 340) +
     r(296, [A('a = 2') + ' oder ' + A('−2'), 'gestreckt'], [A('a = 0,5') + ' oder ' + A('−0,5'), 'gestaucht'], 260, 340) +
-    r(386, ['(x − ' + D('2') + ')²', D('2') + ' nach rechts'], ['(x + ' + D('2') + ')²', D('2') + ' nach links'], 260, 340) +
-    r(476, ['x² ' + E('+ 2'), E('2') + ' nach oben'], ['x² ' + E('− 2'), E('2') + ' nach unten'], 260, 340) +
+    r(386, ['(x − ' + D('2') + ')²', 'um ' + D('2') + ' nach rechts'], ['(x + ' + D('2') + ')²', 'um ' + D('2') + ' nach links'], 260, 340) +
+    r(476, ['x² ' + E('+ 2'), 'um ' + E('2') + ' nach oben'], ['x² ' + E('− 2'), 'um ' + E('2') + ' nach unten'], 260, 340) +
     text(50, 566, 'Minus in der Klammer heißt nach rechts.', 'tb');
 }
 
@@ -347,8 +347,8 @@ const STEPS = [
   { t: 'Die Normalparabel', vb: [1320, 620], parts: ['k', 'a1', 'S', 'z1', 'z2'], fig: fig1 },
   { t: 'Strecken und Stauchen', vb: [1400, 620], parts: ['f', 'fk', 'fz', 'g', 'gk', 'gz'], fig: fig2 },
   { t: 'Nach unten offen', vb: [1320, 620], parts: ['f', 'fk', 'fz', 'g', 'gk', 'gz'], fig: fig3 },
-  { t: 'Nach oben oder unten verschieben', vb: [1290, 630], parts: ['f', 'fk', 'fp', 'fz', 'g', 'gk', 'gp', 'gz'], fig: fig4 },
-  { t: 'Nach rechts oder links verschieben', vb: [1480, 540], parts: ['f', 'fk', 'fp', 'fz', 'g', 'gk', 'gp', 'gd', 'gz'], fig: fig5 },
+  { t: 'Nach oben oder unten verschieben', vb: [1340, 630], parts: ['f', 'fk', 'fp', 'fz', 'g', 'gk', 'gp', 'gz'], fig: fig4 },
+  { t: 'Nach rechts oder links verschieben', vb: [1575, 540], parts: ['f', 'fk', 'fp', 'fz', 'g', 'gk', 'gp', 'gd', 'gz'], fig: fig5 },
   { t: 'Warum nach rechts?', vb: [1300, 600], parts: ['c0', 'c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'p0', 'p1', 'p2', 'p3', 'p4', 'z1', 'z2'], fig: fig6 },
   { t: 'Scheitelpunktform', vb: [1470, 620], parts: ['dz', 'dp', 'ez', 'ep', 'Sz', 'S', 'az', 'apz', 'ap', 'k'], fig: fig7 },
   { t: 'Aufgabe: Beschreibe die Parabel', vb: [1545, 620], parts: ['dz', 'dp', 'ez', 'ep', 'Sz', 'S', 'az', 'k'], fig: fig8,
