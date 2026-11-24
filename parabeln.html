@@ -181,7 +181,7 @@ function fig1() {
     teil('S', punkt(G, 0, 0) + text(G.X(0) + 16, G.Y(0) + 56, 'S(0|0)', 'tb')) +
     spalte(690, 50, 620, [
       { z: ['y = x²'], c: 'th' },
-      { k: 'a1', gap: 10, z: [['y = ' + A('1') + ' · x²', A('a = 1')]], },
+      { k: 'a1', gap: 10, z: ['y = ' + A('1') + ' · x²;  ' + A('a = 1')] },
       { k: 'z1', gap: 24, z: ['Der tiefste Punkt heißt', 'Scheitelpunkt S(0|0).'] },
       { k: 'z2', gap: 24, z: ['Alle anderen Parabeln', 'entstehen aus der Normalparabel', 'durch Strecken, Stauchen', 'und Verschieben.'] }
     ], 170);
@@ -292,12 +292,12 @@ function fig7() {
       { z: ['f(x) = ' + A('a') + '(x − ' + D('d') + ')² + ' + E('e')], c: 'th' },
       { z: ['Scheitelpunkt S(' + D('d') + '|' + E('e') + ')'] },
       { gap: 34, z: [KF('f(x)') + ' = ' + A('2') + '(x + ' + D('3') + ')² ' + E('+ 2')], c: 'th' },
-      { k: 'dz', z: [['(x + ' + D('3') + ')²', D('d = −3') + ', also ' + D('3') + ' nach links']] },
-      { k: 'ez', z: [[E('+ 2'), E('e = 2') + ', also ' + E('2') + ' nach oben']] },
+      { k: 'dz', z: [['(x + ' + D('3') + ')²;  ' + D('d = −3'), D('3') + ' nach links']] },
+      { k: 'ez', z: [[E('+ 2') + ';  ' + E('e = 2'), E('2') + ' nach oben']] },
       { k: 'Sz', z: ['Scheitelpunkt S(' + D('−3') + '|' + E('2') + ')'] },
-      { k: 'az', z: [[A('a = 2'), 'gestreckt, nach oben offen']] },
+      { k: 'az', z: [[A('a = 2'), 'gestreckt,'], ['', 'nach oben offen']] },
       { k: 'apz', z: ['Von S aus 1 nach rechts', 'und ' + A('2') + ' nach oben.'] }
-    ], 150);
+    ], 300);
 }
 
 // ---------- 8 Aufgabe ----------
@@ -314,8 +314,8 @@ function fig8() {
   const G = G8, { a, d, e } = auf, fn = x => a * (x - d) ** 2 + e;
   const aT = a === 1 ? '' : a === -1 ? A('−') : A(zf(a));
   const art = a === 1 ? 'Normalparabel,' : a === -1 ? 'an der x-Achse gespiegelt,' : (Math.abs(a) > 1 ? 'gestreckt,' : 'gestaucht,');
-  const dz = d > 0 ? ['(x − ' + D(d) + ')²', D(`d = ${d}`) + ', also ' + D(d) + ' nach rechts'] : ['(x + ' + D(-d) + ')²', D(`d = ${zf(d)}`) + ', also ' + D(-d) + ' nach links'];
-  const ez = e > 0 ? [E(`+ ${e}`), E(`e = ${e}`) + ', also ' + E(e) + ' nach oben'] : [E(`− ${-e}`), E(`e = ${zf(e)}`) + ', also ' + E(-e) + ' nach unten'];
+  const dz = d > 0 ? ['(x − ' + D(d) + ')²;  ' + D(`d = ${d}`), D(d) + ' nach rechts'] : ['(x + ' + D(-d) + ')²;  ' + D(`d = ${zf(d)}`), D(-d) + ' nach links'];
+  const ez = e > 0 ? [E(`+ ${e}`) + ';  ' + E(`e = ${e}`), E(e) + ' nach oben'] : [E(`− ${-e}`) + ';  ' + E(`e = ${zf(e)}`), E(-e) + ' nach unten'];
   return gitter(G) +
     teil('k', graph(G, fn, 'kf')) +
     teil('dp', pf(G, 0, 0, d, 0, 'd')) +
@@ -327,7 +327,7 @@ function fig8() {
       { k: 'ez', z: [ez] },
       { k: 'Sz', z: ['Scheitelpunkt S(' + D(zf(d)) + '|' + E(zf(e)) + ')'] },
       { k: 'az', z: [[A('a = ' + zf(a)), art], ['', 'nach ' + (a > 0 ? 'oben' : 'unten') + ' offen']] }
-    ], 160);
+    ], 295);
 }
 
 // ---------- 9 Das Wichtigste ----------
@@ -351,7 +351,7 @@ const STEPS = [
   { t: 'Nach rechts oder links verschieben', vb: [1480, 540], parts: ['f', 'fk', 'fp', 'fz', 'g', 'gk', 'gp', 'gd', 'gz'], fig: fig5 },
   { t: 'Warum nach rechts?', vb: [1300, 600], parts: ['c0', 'c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'p0', 'p1', 'p2', 'p3', 'p4', 'z1', 'z2'], fig: fig6 },
   { t: 'Scheitelpunktform', vb: [1470, 620], parts: ['dz', 'dp', 'ez', 'ep', 'Sz', 'S', 'az', 'apz', 'ap', 'k'], fig: fig7 },
-  { t: 'Aufgabe: Beschreibe die Parabel', vb: [1420, 620], parts: ['dz', 'dp', 'ez', 'ep', 'Sz', 'S', 'az', 'k'], fig: fig8,
+  { t: 'Aufgabe: Beschreibe die Parabel', vb: [1545, 620], parts: ['dz', 'dp', 'ez', 'ep', 'Sz', 'S', 'az', 'k'], fig: fig8,
     enter: neueAufgabe, btns: [{ l: 'Neue Aufgabe', f: neueAufgabe }] },
   { t: 'Das Wichtigste', noT: 1, vb: [1400, 630], fig: fig9 }
 ];
