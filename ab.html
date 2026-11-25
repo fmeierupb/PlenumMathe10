@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- Eigenes helles und dunkles Design. So dunkelt der Handy-Browser die Seite nicht selbst ab und macht die Grautöne flau. -->
+<meta name="color-scheme" content="light dark">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; worker-src 'self'; manifest-src 'self'">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-180.png">
@@ -12,8 +14,8 @@
 <meta name="theme-color" content="#0f766e">
 <title>Blatt</title>
 <style>
-:root{--bg:#fbfaf6;--fg:#161a22;--line:#d9d7cf;--card:#fff;--c1:#2563eb;--mut:#7d8596}
-@media (prefers-color-scheme:dark){:root{--bg:#12151b;--fg:#f0f2f6;--line:#343b48;--card:#1f242d;--c1:#5b9bff;--mut:#8b93a5}}
+:root{color-scheme:light dark;--bg:#fbfaf6;--fg:#161a22;--line:#d9d7cf;--card:#fff;--c1:#2563eb;--mut:#5f6673}
+@media (prefers-color-scheme:dark){:root{--bg:#12151b;--fg:#f0f2f6;--line:#343b48;--card:#1f242d;--c1:#5b9bff;--mut:#b3bac7}}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 header{position:sticky;top:0;display:flex;align-items:center;gap:10px;padding:calc(10px + env(safe-area-inset-top)) 12px 10px;background:var(--bg);border-bottom:1px solid var(--line)}
