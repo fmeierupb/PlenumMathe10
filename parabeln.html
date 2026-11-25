@@ -40,10 +40,10 @@ footer{flex-wrap:wrap;row-gap:8px}
 @media (max-width:700px){#extras{order:9;flex-basis:100%;margin:0}#next{margin-left:auto}footer{gap:8px}button,#menu{padding:10px 12px}#cnt{min-width:0}}
 @media (max-width:420px){#prev .lbl{display:none}}
 svg .gr{stroke:var(--grid);stroke-width:1.5}
-svg .ax{stroke:var(--fg);stroke-width:2.5}
+svg .ax{stroke:var(--fg);stroke-width:4}
 svg .axh{fill:var(--fg)}
-svg .tk{fill:var(--mut);font:700 24px system-ui,sans-serif}
-svg .tax{fill:var(--fg);font:italic 600 26px system-ui,sans-serif}
+svg .tk{fill:var(--fg);font:700 28px system-ui,sans-serif}
+svg .tax{fill:var(--fg);font:italic 700 32px system-ui,sans-serif}
 svg .np{stroke:var(--np);stroke-width:4.5;stroke-dasharray:14 9;fill:none}
 svg .pk{stroke:var(--fg);stroke-width:5;fill:none;stroke-linejoin:round}
 /* Unsichtbare Tippflächen: breite Spur entlang von Kurven und Pfeilen, Rechtecke über Textzeilen */
@@ -124,11 +124,11 @@ function gitter(G) {
   let s = `<clipPath id="cl"><rect x="${f1(G.L)}" y="${f1(G.T)}" width="${f1(G.W)}" height="${f1(G.H)}"/></clipPath>`;
   for (let k = Math.ceil(G.x0 * 2); k <= Math.floor(G.x1 * 2); k++) s += `<line class="gr" x1="${f1(X(k / 2))}" y1="${f1(G.T)}" x2="${f1(X(k / 2))}" y2="${f1(G.B)}"/>`;
   for (let k = Math.ceil(G.y0 * 2); k <= Math.floor(G.y1 * 2); k++) s += `<line class="gr" x1="${f1(G.L)}" y1="${f1(Y(k / 2))}" x2="${f1(G.R)}" y2="${f1(Y(k / 2))}"/>`;
-  s += `<line class="ax" x1="${f1(G.L)}" y1="${f1(y0)}" x2="${f1(G.R + 12)}" y2="${f1(y0)}"/><polygon class="axh" points="${f1(G.R + 26)},${f1(y0)} ${f1(G.R + 8)},${f1(y0 - 8)} ${f1(G.R + 8)},${f1(y0 + 8)}"/>`;
-  s += `<line class="ax" x1="${f1(x0)}" y1="${f1(G.B)}" x2="${f1(x0)}" y2="${f1(G.T - 12)}"/><polygon class="axh" points="${f1(x0)},${f1(G.T - 26)} ${f1(x0 - 8)},${f1(G.T - 8)} ${f1(x0 + 8)},${f1(G.T - 8)}"/>`;
-  s += text(G.R + 20, y0 + 28, 'x', 'tax', 'middle') + text(x0 + 16, G.T - 24, 'y', 'tax');
-  for (let i = Math.ceil(G.x0); i <= Math.floor(G.x1); i++) if (i && X(i) > G.L + 12 && X(i) < G.R - 12) s += `<line class="ax" x1="${f1(X(i))}" y1="${f1(y0 - 6)}" x2="${f1(X(i))}" y2="${f1(y0 + 6)}"/>` + text(X(i), y0 + (G.tkUp ? -24 : 24), zf(i), 'tk', 'middle');
-  for (let j = Math.ceil(G.y0); j <= Math.floor(G.y1); j++) if (j && Y(j) > G.T + 12 && Y(j) < G.B - 12) s += `<line class="ax" x1="${f1(x0 - 6)}" y1="${f1(Y(j))}" x2="${f1(x0 + 6)}" y2="${f1(Y(j))}"/>` + text(x0 - 12, Y(j), zf(j), 'tk', 'end');
+  s += `<line class="ax" x1="${f1(G.L)}" y1="${f1(y0)}" x2="${f1(G.R + 12)}" y2="${f1(y0)}"/><polygon class="axh" points="${f1(G.R + 34)},${f1(y0)} ${f1(G.R + 8)},${f1(y0 - 12)} ${f1(G.R + 8)},${f1(y0 + 12)}"/>`;
+  s += `<line class="ax" x1="${f1(x0)}" y1="${f1(G.B)}" x2="${f1(x0)}" y2="${f1(G.T - 12)}"/><polygon class="axh" points="${f1(x0)},${f1(G.T - 34)} ${f1(x0 - 12)},${f1(G.T - 8)} ${f1(x0 + 12)},${f1(G.T - 8)}"/>`;
+  s += text(G.R + 22, y0 + 32, 'x', 'tax', 'middle') + text(x0 + 20, G.T - 28, 'y', 'tax');
+  for (let i = Math.ceil(G.x0); i <= Math.floor(G.x1); i++) if (i && X(i) > G.L + 12 && X(i) < G.R - 12) s += `<line class="ax" x1="${f1(X(i))}" y1="${f1(y0 - 8)}" x2="${f1(X(i))}" y2="${f1(y0 + 8)}"/>` + text(X(i), y0 + (G.tkUp ? -28 : 28), zf(i), 'tk', 'middle');
+  for (let j = Math.ceil(G.y0); j <= Math.floor(G.y1); j++) if (j && Y(j) > G.T + 12 && Y(j) < G.B - 12) s += `<line class="ax" x1="${f1(x0 - 8)}" y1="${f1(Y(j))}" x2="${f1(x0 + 8)}" y2="${f1(Y(j))}"/>` + text(x0 - 14, Y(j), zf(j), 'tk', 'end');
   return s;
 }
 // Kurve im Fenster. Was oben oder unten hinausgeht, schneidet der Rahmen ab.
